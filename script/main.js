@@ -15,7 +15,8 @@ const setQuizzes = async () => {
 
 
 const renderQuizzes = async (quizzes) => {
-    const allQuizzesContainer = document.querySelector('.all-quizzes .quizzes-container')
+    const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
+    const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
 
     lista = quizzes
 

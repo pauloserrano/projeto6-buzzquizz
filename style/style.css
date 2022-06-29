@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Righteous&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&display=swap');
+.pagina02{
+    background-color: #FAFAFA;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto', sans-serif;
+
+}
+.banner-quiz{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.banner-quiz img{
+    position: relative;
+    width: 100%;
+    height: 227px;
+}
+.banner-quiz span{
+
+    position: absolute;
+    font-size: 39px;
+    color: white;
+    
+}
+.caixa-quiz{
+    background-color: rgb(255, 255, 255);
+    width: 759px;
+    height: 676px;
+    margin-top: 42px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+.caixa-imagens-quiz{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.caixa-imagens-quiz img{
+    width: 329px;
+    height: 175px;
+}
+.caixa-resposta{
+    display: flex;
+    flex-direction: column;
+    font-weight: 700;
+    font-size: 20px;
+    margin: 9px 12px;
+}
+.caixa-resposta span{
+
+    margin-top: 8px;
+}
+.pergunta-quiz{
+    width: 688px;
+    height: 137px;
+    background-color: #434CA0;
+    margin-bottom: 25px;
+    font-weight: 700;
+    font-size: 23px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+}
+
+
+
+
+

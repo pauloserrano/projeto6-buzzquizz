@@ -2,11 +2,35 @@ const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/"
 let lista  //lista com todos os quiz's
 let quizObject;
 
-
 const getQuizzes = async (quizId='') => {
     const response = await axios.get(`${apiURL}/${quizId}`)
 
     return response.data
+}
+
+const postQuiz = async () => {
+    const response = await axios.post(apiURL)
+    
+    return response.data.id
+}
+
+const getUserQuizzes = () => {
+    return localStorage.getItem('userQuizzes')
+}
+
+const storeUserQuiz = (id) => {
+    const userQuizzes = getUserQuizzes()
+
+    if (!userQuizzes) {
+        localStorage.setItem('userQuizzes', `[${id}]`)
+    
+    } else {
+        const novoArray = JSON.parse(getUserQuizzes())
+        novoArray.push(id)
+        localStorage.setItem('userQuizzes', JSON.stringify(novoArray))
+    }
+
+    console.log({localStorage: localStorage.userQuizzes})
 }
 
 const setQuizzes = async () => {
@@ -21,6 +45,7 @@ const renderQuizzes = async (quizzes) => {
     lista = quizzes
 
     quizzes.forEach(quiz => {
+        const isFromUser = quiz.id
         allQuizzesContainer.innerHTML += `<li data-id="${quiz.id}">${quiz.title}</li>` 
 
         const newQuiz = allQuizzesContainer.querySelector(':last-child')
@@ -124,4 +149,7 @@ const restartButton = () => {
     exibirQuiz(quizObject.id, quizObject)
 }
 
+
+// Inicialização
+let userQuizzes = getUserQuizzes()
 setQuizzes()

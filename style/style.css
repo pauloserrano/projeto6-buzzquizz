@@ -1,4 +1,113 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Righteous&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&display=swap');
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    width: 100%;
+    min-height: 100vh;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    margin-bottom: 70px;
+    background-color: #EC362D;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+header h1{
+    font-size: 37px;
+    font-weight: bold;
+    color: white;
+}
+
+main.home{
+    max-width: 1050px;
+    margin: 0 auto;
+}
+
+main.home > *{
+    margin-bottom: 70px;
+}
+
+main.home h2{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+main.home .user-quizzes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    min-height: 180px;
+    border: 1px dashed #d4d4d4;
+    border-radius: 5px;
+    font-size: 20px;
+    color: #b9b9b9;
+}
+
+main.home .user-quizzes div{
+    max-width: 250px;
+    margin-bottom: 1.25em;
+    text-align: center;
+}
+
+main.home .user-quizzes button{
+    width: 150px;
+    height: 40px;
+    border: 1px dashed #EC362D;
+    border-radius: 50px;
+    font-size: inherit;
+    color: #EC362D;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+main.home .user-quizzes button:hover{
+    color: white;
+    background-color: #EC362D;
+}
+
+main.home .user-quizzes button:hover,
+main.home .quizzes-container li:hover{
+    transform: scale(1.1);
+    transition: .3s all ease-in-out;
+}
+
+main.home .user-quizzes button:not(:hover),
+main.home .quizzes-container li:not(:hover){
+    transform: scale(1.0);
+    transition: .3s all ease-in-out;
+}
+
+main.home .quizzes-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+main.home .quizzes-container li{
+    display: flex;
+    align-items: flex-end;
+    height: 180px;
+    padding: 1em;
+    border-radius: 5px;
+    font-size: 19px;
+    color: white;
+    background-image: linear-gradient(transparent 50%, black), url(../imagens/teste.png);
+    cursor: pointer;
+}
+
 .pagina02{
     background-color: #FAFAFA;
     width: 100%;

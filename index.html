@@ -16,7 +16,7 @@
     <main class="home">
         <div class="user-quizzes empty">
             <div>Você não criou nenhum quizz ainda :(</div>
-            <button>Criar Quizz</button>
+            <button onclick="startQuizCreation()">Criar Quizz</button>
         </div>
         <div class="all-quizzes">
             <h2>Todos os Quizzes</h2>
@@ -31,6 +31,7 @@
                 -->
             </ul>
         </div>
+
     </main>
 
     <div class="page02 hidden">
@@ -49,9 +50,12 @@
 
     </div>
 
+    <main class="creation"></main>
+
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
     <script src="./script/main.js"></script>
+    <script src="./script/creation.js"></script>
 </body>
 </html>

@@ -123,4 +123,15 @@ const restartButton = () => {
     exibirQuiz(quizObject.id, quizObject)
 }
 
+function checkURL(string) {
+    let url;
+    try {
+        url = new URL(string);
+    } catch (_) {
+        return false;  
+    }
+    if (url != false)
+        return true;
+}
+
 setQuizzes()

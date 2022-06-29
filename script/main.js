@@ -1,5 +1,6 @@
 const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/"
 let lista  //lista com todos os quiz's
+let quizObject;
 
 
 const getQuizzes = async (quizId='') => {
@@ -50,10 +51,11 @@ const openQuiz = (e) => {
 
 function exibirQuiz (quizId, quizObj){
 
+    quizObject = quizObj
     console.log(quizObj)
 
-    document.querySelector(".home").classList.toggle("escondido")
-    document.querySelector(".page02").classList.toggle("escondido")
+    document.querySelector(".home").classList.toggle("hidden")
+    document.querySelector(".page02").classList.toggle("hidden")
 
     document.querySelector(".page02").innerHTML = 
             `
@@ -66,13 +68,14 @@ function exibirQuiz (quizId, quizObj){
             <div class="main-containner-quiz">
             </div>
 
-            <button class="button-home-quiz" onclick="voltarHome()">Voltar pra home</button>
+            <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
+            <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
             `
     for ( let i = 0; i < quizObj.questions.length; i++){
             
         let respostas = quizObj.questions[i].answers
         console.log(respostas)
-        respostas = Aleatorizar(respostas)
+        respostas.sort(() => Math.random() - 0.5)
         console.log(respostas)
 
             document.querySelector(".main-containner-quiz").innerHTML += 
@@ -110,22 +113,14 @@ function foiClicado (e) {
     */
     
 }
-const voltarHome = () => {
-document.querySelector(".home").classList.toggle("escondido")
-document.querySelector(".page02").classList.toggle("escondido")
+const backHome = () => {
+document.querySelector(".home").classList.toggle("hidden")
+document.querySelector(".page02").classList.toggle("hidden")
 }
-
-function Aleatorizar(lista) {
-
-for (let i = lista.length - 1; i > 0; i--) {
-
-    const j = Math.floor(Math.random() * (i + 1));
-
-    [lista[i], lista[j]] = [lista[j], lista[i]];
+const restartButton = () => {
+    
+    backHome()
+    exibirQuiz(quizObject.id, quizObject)
 }
-
-return lista;
-}
-
 
 setQuizzes()

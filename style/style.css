@@ -126,7 +126,7 @@ main.home .quizzes-container li::after{
     z-index: -1;
 }
 
-.pagina02{
+.page02{
     background-color: #FAFAFA;
     width: 100%;
     height: 100%;
@@ -138,6 +138,7 @@ main.home .quizzes-container li::after{
 
 }
 .banner-quiz{
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -147,15 +148,27 @@ main.home .quizzes-container li::after{
     position: relative;
     width: 100%;
     height: 227px;
+    object-fit: cover
 }
 .banner-quiz span{
 
     position: absolute;
     font-size: 39px;
     color: white;
+    z-index: 1;
     
 }
-.caixa-quiz{
+.banner-quiz div{
+
+    position: absolute;
+    width: 100%;
+    height: 227px;
+    background-color: black;
+    opacity: .6;
+    
+}
+
+.containner-quiz{
     background-color: rgb(255, 255, 255);
     width: 759px;
     height: 676px;
@@ -166,29 +179,29 @@ main.home .quizzes-container li::after{
     justify-content: center;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 }
-.caixa-imagens-quiz{
+.question-options{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
 }
-.caixa-imagens-quiz img{
+.question-options img{
     width: 329px;
     height: 175px;
 }
-.caixa-resposta{
+.question{
     display: flex;
     flex-direction: column;
     font-weight: 700;
     font-size: 20px;
     margin: 9px 12px;
 }
-.caixa-resposta span{
+.question span{
 
     margin-top: 8px;
 }
-.pergunta-quiz{
+.question-quiz{
     width: 688px;
     height: 137px;
     background-color: #434CA0;
@@ -261,7 +274,7 @@ main.home .quizzes-container li::after{
     height: 273px;
 
 }
-.botao-reiniciar-quiz{
+.button-restart-quiz{
     width: 260px;
     height: 52px;
     font-weight: 400;
@@ -271,7 +284,7 @@ main.home .quizzes-container li::after{
     border: none;
     border-radius: 15px;
 }
-.botao-home-quiz{
+.button-home-quiz{
     margin-top: 16px;
     margin-bottom: 85px;
     width: 220px;
@@ -282,5 +295,9 @@ main.home .quizzes-container li::after{
     background-color: #FAFAFA;
     border: none;
 
+}
+
+.escondido {
+    display: none;
 }
 

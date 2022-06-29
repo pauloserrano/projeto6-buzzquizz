@@ -122,6 +122,7 @@ main.home .quizzes-container li::after{
     left: 0;
     bottom: 0;
     position: absolute;
+    pointer-events: none;
     z-index: -1;
 }
 

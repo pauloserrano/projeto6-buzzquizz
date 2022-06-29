@@ -1,14 +1,18 @@
 const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/"
 
 
-const getQuizzes = (quizId='') => {
-    axios.get(`${apiURL}/${quizId}`)
-        .catch(err => console.log(err))
-        .then(response => renderQuizzes(response.data))
+const getQuizzes = async (quizId='') => {
+    const response = await axios.get(`${apiURL}/${quizId}`)
+
+    return response.data
+}
+
+const setQuizzes = async () => {
+    renderQuizzes(await getQuizzes())
 }
 
 
-const renderQuizzes = (quizzes) => {
+const renderQuizzes = async (quizzes) => {
     const allQuizzesContainer = document.querySelector('.all-quizzes .quizzes-container')
 
     quizzes.forEach(quiz => {
@@ -33,4 +37,4 @@ const openQuiz = (e) => {
 }
 
 
-getQuizzes()
+setQuizzes()

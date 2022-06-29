@@ -14,22 +14,22 @@
         <h1>BuzzQuizz</h1>
     </header>
     <main class="home">
-        <div class="user-quizzes empty">
-            <div>Você não criou nenhum quizz ainda :(</div>
-            <button>Criar Quizz</button>
+        <div class="user-quizzes">
+            <div class="empty">
+                <div>Você não criou nenhum quizz ainda :(</div>
+                <button onclick="startQuizCreation">Criar Quizz</button>
+            </div>
+            <div class="all-quizzes">
+                <h2>Todos os Quizzes <button onclick="startQuizCreation">+</button></h2>
+                <ul class="quizzes-container">
+                    <li>Lorem ipsum dolor sit amet.</li>
+                    <li>Lorem ipsum dolor sit amet.</li>
+                </ul>
+            </div>
         </div>
         <div class="all-quizzes">
             <h2>Todos os Quizzes</h2>
-            <ul class="quizzes-container">
-                <!-- 
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                -->
-            </ul>
+            <ul class="quizzes-container"></ul>
         </div>
     </main>
 

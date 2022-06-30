@@ -14,44 +14,35 @@
         <h1>BuzzQuizz</h1>
     </header>
     <main class="home">
-        <div class="user-quizzes empty">
-            <div>Você não criou nenhum quizz ainda :(</div>
-            <button>Criar Quizz</button>
+        <div class="user-quizzes">
+            <div class="empty">
+                <div>Você não criou nenhum quizz ainda :(</div>
+                <button onclick="startQuizCreation">Criar Quizz</button>
+            </div>
+            <div class="all-quizzes">
+                <h2>Todos os Quizzes <button onclick="startQuizCreation">+</button></h2>
+                <ul class="quizzes-container">
+                    <li>Lorem ipsum dolor sit amet.</li>
+                    <li>Lorem ipsum dolor sit amet.</li>
+                </ul>
+            </div>
         </div>
         <div class="all-quizzes">
             <h2>Todos os Quizzes</h2>
-            <ul class="quizzes-container">
-                <!-- 
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                <li>Acerte os personagens corretos dos Simpsons e prove seu amor!</li>
-                -->
-            </ul>
+            <ul class="quizzes-container"></ul>
         </div>
+
     </main>
 
     <main class="page02 hidden">
-
-        <div class="containner-result-quiz">
-            <div class="info-quiz">88% de acerto: Você é praticamente um aluno de Hogwarts!</div>
-
-            <div class="result-quiz">
-                <img src="imagens/teste-resultado.png" alt="">
-                <span>Parabéns Potterhead! Bem-vindx a Hogwarts, aproveite o loop infinito de comida e clique no botão abaixo para usar o vira-tempo e reiniciar este teste.</span>
-            </div>
-        </div>
-
-        <button class="button-restart-quiz" onclick="">Reiniciar Quizz</button>
-        <button class="button-home-quiz" onclick="voltarHome()">Voltar pra home</button>
-
     </main>
+
+    <main class="creation"></main>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
     <script src="./script/main.js"></script>
+    <script src="./script/creation.js"></script>
 </body>
 </html>

@@ -5,11 +5,35 @@ let result = 0;
 let clicks = 0;
 
 
-
 const getQuizzes = async (quizId='') => {
     const response = await axios.get(`${apiURL}/${quizId}`)
 
     return response.data
+}
+
+const postQuiz = async () => {
+    const response = await axios.post(apiURL)
+    
+    return response.data.id
+}
+
+const getUserQuizzes = () => {
+    return localStorage.getItem('userQuizzes')
+}
+
+const storeUserQuiz = (id) => {
+    const userQuizzes = getUserQuizzes()
+
+    if (!userQuizzes) {
+        localStorage.setItem('userQuizzes', `[${id}]`)
+    
+    } else {
+        const novoArray = JSON.parse(getUserQuizzes())
+        novoArray.push(id)
+        localStorage.setItem('userQuizzes', JSON.stringify(novoArray))
+    }
+
+    console.log({localStorage: localStorage.userQuizzes})
 }
 
 const setQuizzes = async () => {
@@ -18,11 +42,13 @@ const setQuizzes = async () => {
 
 
 const renderQuizzes = async (quizzes) => {
-    const allQuizzesContainer = document.querySelector('.all-quizzes .quizzes-container')
+    const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
+    const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
 
     lista = quizzes
 
     quizzes.forEach(quiz => {
+        const isFromUser = quiz.id
         allQuizzesContainer.innerHTML += `<li data-id="${quiz.id}">${quiz.title}</li>` 
 
         const newQuiz = allQuizzesContainer.querySelector(':last-child')
@@ -225,4 +251,18 @@ function verifyResult(){
             }
     }   
 }
+function checkURL(string) {
+    let url;
+    try {
+        url = new URL(string);
+    } catch (_) {
+        return false;  
+    }
+    if (url != false)
+        return true;
+}
+
+
+// Inicialização
 setQuizzes()
+let userQuizzes = getUserQuizzes()

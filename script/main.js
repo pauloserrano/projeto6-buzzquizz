@@ -194,6 +194,8 @@ function verifyResult(){
 
     total = Math.round((result/quizObject.questions.length) * 100)
 
+    quizObject.levels.sort(ordemCrescente)
+
     if (clicks === quizObject.questions.length){
         
         
@@ -272,3 +274,14 @@ function checkURL(string) {
 
 // Inicialização
 setQuizzes()
+
+let ordemCrescente = (a, b) => {
+    if (a.minValue > b.minValue) {
+      return 1;
+    }
+    if (a.minValue < b.minValue) {
+      return -1;
+    }
+   
+    return 0;
+  }

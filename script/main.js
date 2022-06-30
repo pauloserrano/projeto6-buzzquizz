@@ -80,6 +80,7 @@ function exibirQuiz (quizId, quizObj){
 
     quizObject = quizObj
     console.log(quizObj)
+    document.body.scrollIntoView()
 
     document.querySelector(".home").classList.add("hidden")
     document.querySelector(".home").classList.add("hidden")

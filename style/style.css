@@ -207,7 +207,7 @@ main.home .quizzes-container li::after{
 .containner-quiz{
     background-color: rgb(255, 255, 255);
     width: 759px;
-    height: 676px;
+    
     margin-top: 42px;
     display: flex;
     flex-direction: column;

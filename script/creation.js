@@ -61,8 +61,3 @@ function checkBasicInfo(basicInfo) {
 function startQuestionsCreation() {
     console.log("startQuestionsCreation");
 }
-
-
-
-
-

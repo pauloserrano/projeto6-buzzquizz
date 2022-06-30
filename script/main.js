@@ -1,4 +1,4 @@
-const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/"
+const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes"
 let lista  //lista com todos os quiz's
 let quizObject;
 
@@ -14,20 +14,20 @@ const postQuiz = async () => {
     return response.data.id
 }
 
-const getUserQuizzes = () => {
-    return localStorage.getItem('userQuizzes')
+const getUserQuizzesID = (key="userQuizzes") => {
+    return JSON.parse(localStorage.getItem(key))
 }
 
-const storeUserQuiz = (id) => {
-    const userQuizzes = getUserQuizzes()
+const storeUserQuizID = (id, key="userQuizzes") => {
+    const userQuizzes = localStorage.getItem(key)
 
     if (!userQuizzes) {
-        localStorage.setItem('userQuizzes', `[${id}]`)
+        localStorage.setItem(key, `[${id}]`)
     
     } else {
-        const novoArray = JSON.parse(getUserQuizzes())
+        const novoArray = JSON.parse(userQuizzes)
         novoArray.push(id)
-        localStorage.setItem('userQuizzes', JSON.stringify(novoArray))
+        localStorage.setItem(key, JSON.stringify(novoArray))
     }
 
     console.log({localStorage: localStorage.userQuizzes})
@@ -41,22 +41,23 @@ const setQuizzes = async () => {
 const renderQuizzes = async (quizzes) => {
     const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
     const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
-
+    const userQuizzesIds = getUserQuizzesID()
     lista = quizzes
 
     quizzes.forEach(quiz => {
-        const isFromUser = quiz.id
-        allQuizzesContainer.innerHTML += `<li data-id="${quiz.id}">${quiz.title}</li>` 
+        let container = allQuizzesContainer
+        const isFromUser = userQuizzesIds.some(id => id === quiz.id)
+        
+        if (isFromUser) container = userQuizzesContainer
 
-        const newQuiz = allQuizzesContainer.querySelector(':last-child')
+        container.innerHTML += `<li data-id="${quiz.id}">${quiz.title}</li>` 
+        const newQuiz = container.querySelector(':last-child')
         newQuiz.style.backgroundImage = `url(${quiz.image})`
     });
 
-        
-    const allQuizzes = allQuizzesContainer.querySelectorAll('li')
+    // Evento onclick
+    const allQuizzes = document.querySelectorAll('.quizzes-container li')
     allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
-
-    console.log(quizzes)
 }
 
 
@@ -65,14 +66,11 @@ const openQuiz = (e) => {
     let quiz;
     console.log(quizId)
     
-    /* TO-DO */
-
     for (let i = 0; i < lista.length; i++){
         if(Number(lista[i].id) === Number(quizId)) quiz = lista[i];
     }
     
     exibirQuiz(quizId, quiz)
-
 }
 
 function exibirQuiz (quizId, quizObj){
@@ -163,4 +161,3 @@ function checkURL(string) {
 
 // Inicialização
 setQuizzes()
-let userQuizzes = getUserQuizzes()

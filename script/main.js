@@ -1,6 +1,9 @@
-const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/"
+const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes"
 let lista  //lista com todos os quiz's
 let quizObject;
+let result = 0;
+let clicks = 0;
+
 
 
 const getQuizzes = async (quizId='') => {
@@ -34,18 +37,16 @@ const renderQuizzes = async (quizzes) => {
 }
 
 
-const openQuiz = (e) => {
+const openQuiz = async (e) => {
     const quizId = e.dataset.id
     let quiz;
     console.log(quizId)
     
     /* TO-DO */
 
-    for (let i = 0; i < lista.length; i++){
-        if(Number(lista[i].id) === Number(quizId)) quiz = lista[i];
-    }
-    
-    exibirQuiz(quizId, quiz)
+    quiz = await axios.get(`${apiURL}/${quizId}`)
+
+    exibirQuiz(quizId, quiz.data)
 
 }
 
@@ -54,8 +55,9 @@ function exibirQuiz (quizId, quizObj){
     quizObject = quizObj
     console.log(quizObj)
 
-    document.querySelector(".home").classList.toggle("hidden")
-    document.querySelector(".page02").classList.toggle("hidden")
+    document.querySelector(".home").classList.add("hidden")
+    document.querySelector(".home").classList.add("hidden")
+    document.querySelector(".page02").classList.remove("hidden")
 
     document.querySelector(".page02").innerHTML = 
             `
@@ -67,9 +69,6 @@ function exibirQuiz (quizId, quizObj){
 
             <div class="main-containner-quiz">
             </div>
-
-            <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
-            <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
             `
     for ( let i = 0; i < quizObj.questions.length; i++){
             
@@ -83,18 +82,21 @@ function exibirQuiz (quizId, quizObj){
             `
             <div class="containner-quiz">
 
-                <div class="question-quiz">${quizObj.questions[i].title}</div> 
+                <div class="question-quiz" style="background-color: ${quizObject.questions[i].color}">${quizObj.questions[i].title}</div> 
 
                 <div class="question-options">
                 </div>
 
             </div>
+            
             `
+            
+            //.style.backgroundColor = "red";
        
         for (let z = 0; z < quizObj.questions[i].answers.length; z++ ){
 
             document.querySelectorAll(".question-options")[document.querySelectorAll(".question-options").length - 1].innerHTML += `
-            <div class="question" onclick="foiClicado(this)">
+            <div class="question ${quizObj.questions[i].answers[z].isCorrectAnswer}" onclick="foiClicado(this)">
             <img src="${quizObj.questions[i].answers[z].image}" alt="">
             <span>${quizObj.questions[i].answers[z].text}</span>
             </div>
@@ -104,23 +106,123 @@ function exibirQuiz (quizId, quizObj){
 
 }
 function foiClicado (e) {
-    e.childNodes[1].getAttribute('src')
-    e.childNodes[3].innerHTML
-    /*
-    if(e.childNodes[1].getAttribute('src' === "certo" && e.childNodes[3].innerHTML === "certo"){
+ 
+    let proximo = e.parentElement.parentElement.nextElementSibling
+
+    setTimeout(function(){
+    if (proximo !== null) proximo.scrollIntoView({block: "center", behavior: "smooth"});
+    else document.querySelector(".containner-result-quiz").scrollIntoView({block: "center", behavior: "smooth"})
+    }, 500); //2 segundos é muita coisa
+
+    e.classList.toggle("quiz-opacity")
+    clicks++
         
-    }
-    */
-    
-}
-const backHome = () => {
-document.querySelector(".home").classList.toggle("hidden")
-document.querySelector(".page02").classList.toggle("hidden")
-}
-const restartButton = () => {
-    
-    backHome()
-    exibirQuiz(quizObject.id, quizObject)
+        
+        for(let i = 1; i < (e.parentNode.childNodes.length - 1); i+=2){           
+            
+            if (e.parentNode.childNodes[i].className === "question true" ){
+
+                e.parentNode.childNodes[i].classList.toggle("quiz-opacity")
+                e.parentNode.childNodes[i].classList.toggle("quiz-true");
+            }
+            else if (e.parentNode.childNodes[i].className === "question true quiz-opacity"){
+
+                result++
+                e.parentNode.childNodes[i].classList.toggle("quiz-opacity")
+                e.parentNode.childNodes[i].classList.toggle("quiz-true");
+            } else {
+                
+                e.parentNode.childNodes[i].classList.toggle("quiz-opacity")
+                e.parentNode.childNodes[i].classList.toggle("quiz-false")  
+            }        
+        }   
+    verifyResult()
 }
 
+const backHome = () => {
+document.querySelector(".home").classList.remove("hidden")
+document.querySelector(".page02").classList.add("hidden")
+restartVar()
+}
+const restartButton = () => {
+    document.querySelector(".question-options").scrollIntoView({block: "center", behavior: "smooth"});
+    restartVar()
+    backHome()
+    exibirQuiz(quizObject.id, quizObject)
+    
+}
+function restartVar () {
+
+    result = 0;
+    clicks = 0;
+
+}
+function verifyResult(){
+
+    total = Math.round((result/quizObject.questions.length) * 100)
+
+    if (clicks === quizObject.questions.length){
+        
+        
+            if ( total >= quizObject.levels[quizObject.levels.length - 1].minValue){
+                document.querySelector(".page02").innerHTML +=`
+                <div class="containner-result-quiz">
+                <div class="info-quiz">${total}% de acerto: ${quizObject.levels[quizObject.levels.length - 1].title}</div>
+        
+                <div class="result-quiz">
+                    <img src="${quizObject.levels[quizObject.levels.length - 1].image}" alt="">
+                    <span>${quizObject.levels[quizObject.levels.length - 1].text}</span>
+                </div>
+                </div>
+                
+                <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
+                <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
+                `          
+            }  else if (total >= quizObject.levels.length - 2) {
+                document.querySelector(".page02").innerHTML +=`
+                <div class="containner-result-quiz">
+                <div class="info-quiz">${total}% de acerto: ${quizObject.levels[quizObject.levels.length - 2].title}</div>
+        
+                <div class="result-quiz">
+                    <img src="${quizObject.levels[quizObject.levels.length - 2].image}" alt="">
+                    <span>${quizObject.levels[quizObject.levels.length - 2].text}</span>
+                </div>
+                </div>
+                
+                <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
+                <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
+                `          
+            }  
+            else if (total >= quizObject.levels.length - 3) {
+                document.querySelector(".page02").innerHTML +=`
+                <div class="containner-result-quiz">
+                <div class="info-quiz">${total}% de acerto: ${quizObject.levels[quizObject.levels.length - 3].title}</div>
+        
+                <div class="result-quiz">
+                    <img src="${quizObject.levels[quizObject.levels.length - 3].image}" alt="">
+                    <span>${quizObject.levels[quizObject.levels.length - 3].text}</span>
+                </div>
+                </div>
+                
+                <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
+                <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
+                `           
+            }  
+            else {
+                document.querySelector(".page02").innerHTML +=`
+                <div class="containner-result-quiz">
+                <div class="info-quiz">${total}% de acerto: ${quizObject.levels[quizObject.levels.length - 4].title}</div>
+        
+                <div class="result-quiz">
+                    <img src="${quizObject.levels[quizObject.levels.length - 4].image}" alt="">
+                    <span>${quizObject.levels[quizObject.levels.length - 4].text}</span>
+                </div>
+                </div>
+                
+                <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
+                <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
+                `
+            }
+    }   
+}
 setQuizzes()

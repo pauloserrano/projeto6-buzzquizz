@@ -79,13 +79,15 @@ main.home .user-quizzes button:hover{
 }
 
 main.home .user-quizzes button:hover,
-main.home .quizzes-container li:hover{
+main.home .quizzes-container li:hover,
+.main-containner-quiz .question:hover{
     transform: scale(1.1);
     transition: .3s all ease-in-out;
 }
 
 main.home .user-quizzes button:not(:hover),
-main.home .quizzes-container li:not(:hover){
+main.home .quizzes-container li:not(:hover),
+.main-containner-quiz .question:not(:hover){
     transform: scale(1.0);
     transition: .3s all ease-in-out;
 }
@@ -180,17 +182,17 @@ main.home .quizzes-container li::after{
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 }
 .question-options{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
 }
 .question-options img{
     width: 329px;
     height: 175px;
 }
+
 .question{
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     font-weight: 700;
@@ -198,13 +200,14 @@ main.home .quizzes-container li::after{
     margin: 9px 12px;
 }
 .question span{
-
+    word-break: break-word;
     margin-top: 8px;
+    max-width: 329px;;
 }
 .question-quiz{
     width: 688px;
     height: 137px;
-    background-color: #434CA0;
+    background-color: #1070ff;
     margin-top: 28px;
     margin-bottom: 25px;
     font-weight: 700;
@@ -216,16 +219,17 @@ main.home .quizzes-container li::after{
    
 }
 .quiz-false{
-    color: #FF4B4B;   
+    color: #FF4B4B;
+    pointer-events: none;   
 }
 .quiz-true{
-    color: #009C22;   
+    color: #009C22;  
+    pointer-events: none;  
 }
 .quiz-opacity{
     opacity: 0.3;
 }
-.caixa-resultado-quiz{
-    
+.containner-result-quiz{ 
     background-color: #ffffff;
     width: 759px;
     height: 430px;
@@ -236,10 +240,9 @@ main.home .quizzes-container li::after{
     margin-top: 44px;
     margin-bottom: 57px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
- 
 }
 
-.porcentagem-quiz{
+.info-quiz{
     width: 727px;
     height: 99px;
 
@@ -252,13 +255,13 @@ main.home .quizzes-container li::after{
     font-weight: 700;
     color: white;
 }
-.resultado-quiz{
+.result-quiz{
     display: flex;
     justify-content: left;
     margin-top: 18px;
     width: 727px;
 }
-.caixa-resultado-quiz span{
+.containner-result-quiz span{
 
     color: #484848;
     max-width: 328px;
@@ -267,9 +270,10 @@ main.home .quizzes-container li::after{
     top: 0;
     font-weight: 700;
     font-size: 19px;
+    word-break: break-all;
 
 }
-.caixa-resultado-quiz img{
+.containner-result-quiz img{
 
     width: 364px;
     height: 273px;

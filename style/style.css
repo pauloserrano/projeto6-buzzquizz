@@ -344,8 +344,8 @@ main.home .quizzes-container li::after{
 
 main.creation {
     background-color: #FAFAFA;
-    min-width: 100vw;
-    min-height: 100vh;
+    min-width: 100%;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     width: 600px;

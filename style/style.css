@@ -49,7 +49,8 @@ main.home h2{
     position: relative;
 }
 
-main.home .user-quizzes > *.hidden{
+main.home .user-quizzes .empty.hidden,
+main.home .user-quizzes .all-quizzes.hidden{
     display: none;
 }
 

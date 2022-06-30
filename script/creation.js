@@ -148,9 +148,3 @@ function createQuestions(element) {
 function collapseDiv(element) {
     element.parentNode.classList.toggle("collapsed");
 }
-
-
-
-
-
-

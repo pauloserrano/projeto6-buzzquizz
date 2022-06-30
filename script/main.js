@@ -1,4 +1,4 @@
-const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes"
+const apiURL = "https://mock-api.driven.com.br/api/v7/buzzquizz/quizzes"
 let lista  //lista com todos os quiz's
 let quizObject;
 let result = 0;
@@ -17,20 +17,20 @@ const postQuiz = async () => {
     return response.data.id
 }
 
-const getUserQuizzes = () => {
-    return localStorage.getItem('userQuizzes')
+const getUserQuizzesID = (key="userQuizzes") => {
+    return JSON.parse(localStorage.getItem(key))
 }
 
-const storeUserQuiz = (id) => {
-    const userQuizzes = getUserQuizzes()
+const storeUserQuizID = (id, key="userQuizzes") => {
+    const userQuizzes = localStorage.getItem(key)
 
     if (!userQuizzes) {
-        localStorage.setItem('userQuizzes', `[${id}]`)
+        localStorage.setItem(key, `[${id}]`)
     
     } else {
-        const novoArray = JSON.parse(getUserQuizzes())
+        const novoArray = JSON.parse(userQuizzes)
         novoArray.push(id)
-        localStorage.setItem('userQuizzes', JSON.stringify(novoArray))
+        localStorage.setItem(key, JSON.stringify(novoArray))
     }
 
     console.log({localStorage: localStorage.userQuizzes})
@@ -44,22 +44,30 @@ const setQuizzes = async () => {
 const renderQuizzes = async (quizzes) => {
     const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
     const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
-
+    const userQuizzesIds = getUserQuizzesID() || []
     lista = quizzes
 
     quizzes.forEach(quiz => {
-        const isFromUser = quiz.id
-        allQuizzesContainer.innerHTML += `<li data-id="${quiz.id}">${quiz.title}</li>` 
+        let container = allQuizzesContainer
+        const isFromUser = userQuizzesIds.some(id => id === quiz.id)
+        
+        if (isFromUser) container = userQuizzesContainer
 
-        const newQuiz = allQuizzesContainer.querySelector(':last-child')
+        container.innerHTML += `<li data-id="${quiz.id}">${quiz.title}</li>` 
+        const newQuiz = container.querySelector(':last-child')
         newQuiz.style.backgroundImage = `url(${quiz.image})`
     });
 
-        
-    const allQuizzes = allQuizzesContainer.querySelectorAll('li')
-    allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
+    if (userQuizzesContainer.querySelector('li') !== null){
+        document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
+    
+    } else {
+        document.querySelector('.home .user-quizzes .empty').classList.remove('hidden')
+    }
 
-    console.log(quizzes)
+    // Evento onclick
+    const allQuizzes = document.querySelectorAll('.quizzes-container li')
+    allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
 }
 
 
@@ -67,8 +75,6 @@ const openQuiz = async (e) => {
     const quizId = e.dataset.id
     let quiz;
     console.log(quizId)
-    
-    /* TO-DO */
 
     quiz = await axios.get(`${apiURL}/${quizId}`)
 
@@ -188,6 +194,8 @@ function verifyResult(){
 
     total = Math.round((result/quizObject.questions.length) * 100)
 
+    quizObject.levels.sort(ordemCrescente)
+
     if (clicks === quizObject.questions.length){
         
         
@@ -266,4 +274,14 @@ function checkURL(string) {
 
 // Inicialização
 setQuizzes()
-let userQuizzes = getUserQuizzes()
+
+let ordemCrescente = (a, b) => {
+    if (a.minValue > b.minValue) {
+      return 1;
+    }
+    if (a.minValue < b.minValue) {
+      return -1;
+    }
+   
+    return 0;
+  }

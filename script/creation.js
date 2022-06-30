@@ -7,7 +7,7 @@ let quiz = {
 
 function startQuizCreation() {
     document.querySelector("main.home").classList.add("hidden");
-    document.querySelector("div.page02").classList.add("hidden"); //mudar para main
+    document.querySelector("main.page02").classList.add("hidden");
 
     document.querySelector("main.creation").innerHTML = `
         <h3>Comece pelo começo</h3>

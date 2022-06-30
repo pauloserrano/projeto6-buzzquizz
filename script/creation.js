@@ -18,6 +18,7 @@ function startQuizCreation() {
         </div>
         <button onclick="createBasicInfo(this)">Prosseguir para criar perguntas</button>
     `;
+    //colocar um função aqui para inserir os values nos inputs para editar
 }
 function createBasicInfo(element) {
     const basicInfo = {
@@ -31,11 +32,11 @@ function createBasicInfo(element) {
     if (checkBasicInfo(basicInfo)) {
         quiz.title = basicInfo.title;
         quiz.image = basicInfo.image;
-        for(let i=0 ; i<basicInfo.nquestions ; i++)
-            quiz.questions[i] = i+1;
-        for(let i=0 ; i<basicInfo.nlevels ; i++)
-            quiz.levels[i] = i+1;
-        
+        quiz.questions.length = basicInfo.nquestions;
+        quiz.questions = quiz.questions.slice(0,basicInfo.nquestions);
+        quiz.levels.length = basicInfo.nlevels;
+        quiz.levels = quiz.levels.slice(0,basicInfo.nlevels);
+
         console.log(quiz);        
         startQuestionsCreation();
     } else
@@ -88,6 +89,8 @@ function startQuestionsCreation() {
         document.querySelector("main.creation").innerHTML += `
             <button onclick="createQuestions(this)">Prosseguir para criar níveis</button>
        `;
+
+    //colocar um função aqui para inserir os values nos inputs para editar    
 }
 function createQuestions(element) {
     let createdQuestions = [];
@@ -96,21 +99,18 @@ function createQuestions(element) {
 
     for (let i=0 ; i<quiz.questions.length ; i++) {
         questionElm = element.parentNode.querySelector(`div.create-questions:nth-of-type(${i+1})`);
-        
-        let j=0;
-        createdAnswers[j] = {
-            text: `${questionElm.querySelector(`input:nth-of-type(${3+j*2})`).value}`,
-            image: `${questionElm.querySelector(`input:nth-of-type(${4+j*2})`).value}`,
-            isCorrectAnswer: true,
-        };
-        for (j=1 ; j<4 ; j++) {
-            
-            if(questionElm.querySelector(`input:nth-of-type(${3+j*2})`).value.length > 0 && questionElm.querySelector(`input:nth-of-type(${4+j*2})`).value.length > 0)
+
+        createdAnswers = [];
+        for (j=0 ; j<4 ; j++) {
+            if(questionElm.querySelector(`input:nth-of-type(${3+j*2})`).value.length > 0 && questionElm.querySelector(`input:nth-of-type(${4+j*2})`).value.length > 0) {
+                let jtext = questionElm.querySelector(`input:nth-of-type(${3+j*2})`).value;
+                let jimage = questionElm.querySelector(`input:nth-of-type(${4+j*2})`).value;
                 createdAnswers[j] = {
-                    text: `${questionElm.querySelector(`input:nth-of-type(${3+j*2})`).value}`,
-                    image: `${questionElm.querySelector(`input:nth-of-type(${4+j*2})`).value}`,
-                    isCorrectAnswer: false,
+                    text: jtext,
+                    image: jimage,
+                    isCorrectAnswer: (j===0),
                 };
+            }
         }
 
         createdQuestions[i] = {
@@ -119,6 +119,7 @@ function createQuestions(element) {
             answers: createdAnswers,
         };
     }
+    
     console.log(createdQuestions);
     //if(checkQuestions(createdQuestions))
 }

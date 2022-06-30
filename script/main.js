@@ -1,4 +1,4 @@
-const apiURL = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes"
+const apiURL = "https://mock-api.driven.com.br/api/v7/buzzquizz/quizzes"
 let lista  //lista com todos os quiz's
 let quizObject;
 
@@ -41,7 +41,7 @@ const setQuizzes = async () => {
 const renderQuizzes = async (quizzes) => {
     const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
     const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
-    const userQuizzesIds = getUserQuizzesID()
+    const userQuizzesIds = getUserQuizzesID() || []
     lista = quizzes
 
     quizzes.forEach(quiz => {
@@ -54,6 +54,13 @@ const renderQuizzes = async (quizzes) => {
         const newQuiz = container.querySelector(':last-child')
         newQuiz.style.backgroundImage = `url(${quiz.image})`
     });
+
+    if (userQuizzesContainer.querySelector('li') !== null){
+        document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
+    
+    } else {
+        document.querySelector('.home .user-quizzes .empty').classList.remove('hidden')
+    }
 
     // Evento onclick
     const allQuizzes = document.querySelectorAll('.quizzes-container li')

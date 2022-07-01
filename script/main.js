@@ -52,7 +52,7 @@ const getQuizzes = async (quizId='') => {
 
 const editQuiz = (e) => {
     e.stopPropagation()
-    const quizElement = e.target.parentElement.parentElement.parentElement
+    const quizElement = e.target.parentElement.parentElement
     const quizID = Number(quizElement.dataset.id)
     const quizKey = userStorage.get.key(quizID)
 
@@ -62,7 +62,7 @@ const editQuiz = (e) => {
 
 const deleteQuiz = (e) => {
     e.stopPropagation()
-    const quizElement = e.target.parentElement.parentElement.parentElement
+    const quizElement = e.target.parentElement.parentElement
     const quizID = Number(quizElement.dataset.id)
     const quizKey = userStorage.get.key(quizID)
 
@@ -118,20 +118,24 @@ const renderQuizzes = async (quizzes) => {
 
         const newQuiz = container.querySelector('li:last-child')
         newQuiz.style.backgroundImage = `url(${quiz.image})`
-        
-        // Define evento onclick de edição e delete
-        if (isFromUser){
-            const editBtn = newQuiz.querySelector('.options button:first-child')
-            const deleteBtn = newQuiz.querySelector('.options button:nth-child(2)')
+    });
+
+    // Define evento onclick de abrir, editar e deletar
+    const allQuizzes = document.querySelectorAll('.quizzes-container li')
+    const userQuizzes = userQuizzesContainer.querySelectorAll('.options')
+
+    allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
+
+    if (userQuizzes){
+        userQuizzes.forEach(options => {
+            const editBtn = options.querySelector('button:first-child')
+            const deleteBtn = options.querySelector('button:nth-child(2)')
             
             editBtn.addEventListener('click', editQuiz)
             deleteBtn.addEventListener('click', deleteQuiz)
-        }
-    });
+        })
+    }
 
-    // Define evento onclick geral
-    const allQuizzes = document.querySelectorAll('.quizzes-container li')
-    allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
     
     // Mostrar container certo dependendo se o usuario criou quizzes ou não
     if (userQuizzesContainer.querySelector('li') !== null){
@@ -249,6 +253,7 @@ function foiClicado (e) {
 const backHome = () => {
     document.querySelector(".home").classList.remove("hidden")
     document.querySelector(".page02").classList.add("hidden")
+    document.querySelector(".creation").classList.add("hidden")
     restartVar()
 }
 

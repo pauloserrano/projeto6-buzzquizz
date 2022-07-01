@@ -21,7 +21,7 @@ header{
     height: 70px;
     margin-bottom: 70px;
     background-color: #EC362D;
-    z-index: 1;
+    z-index: 2;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -96,9 +96,9 @@ main.home .user-quizzes .empty button:hover{
 .main-containner-quiz .question:hover,
 main.home .user-quizzes .empty button:hover,
 main.home .quizzes-container li:hover,
-main.home .user-quizzes .all-quizzes button:hover{
+main.home .user-quizzes .all-quizzes h2 button:hover{
     z-index: 1;
-    transform: scale(1.1);
+    transform: scale(1.05);
     transition: .3s all ease-in-out;
 }
 
@@ -106,14 +106,14 @@ main.home .user-quizzes .all-quizzes button:hover{
 .main-containner-quiz .question:not(:hover),
 main.home .user-quizzes .empty button:not(:hover),
 main.home .quizzes-container li:not(:hover),
-main.home .user-quizzes .all-quizzes button:not(:hover){
+main.home .user-quizzes .all-quizzes h2 button:not(:hover){
     transform: scale(1.0);
     transition: .3s all ease-in-out;
 }
 
-main.home .user-quizzes .all-quizzes button{
-    width: 30px;
-    height: 30px;
+main.home .user-quizzes .all-quizzes h2 button{
+    min-width: 30px;
+    min-height: 30px;
     position: relative;
     font-size: 24px;
     font-family: monospace;
@@ -161,6 +161,39 @@ main.home .quizzes-container li::after{
     pointer-events: none;
     z-index: -1;
 }
+
+main.home .user-quizzes .quizzes-container li div.options{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    top: 12px;
+    background-color: #EC362D; 
+    border-radius: 15px 0 0 15px;
+    overflow: hidden;
+}
+
+
+main.home .user-quizzes .quizzes-container li div.options button{
+    background-color: transparent;
+    padding: 8px;
+    border: transparent;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+main.home .user-quizzes .quizzes-container li div.options button:hover{
+    background-color: rgb(255, 255, 255, 0.25);
+    transition: .2s linear all;
+}
+
+main.home .user-quizzes .quizzes-container li div.options button ion-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 .page02{
     background-color: #FAFAFA;
@@ -385,31 +418,57 @@ main.creation button {
     height: 54px;
     color: #fff5f4;
     background-color: #EC362D;
+    font-size: 21px;
     border: transparent;
     border-radius: 15px;
-    margin: 50px auto 50px auto;
+    margin: 50px auto 10px auto;
 }
-main.creation div.create-questions input:nth-of-type(2n) {
+main.creation div.create.questions input:nth-of-type(2n) {
     margin-bottom: 32px;
 }
-div.create-questions ion-icon {
+main.creation button.button-home-quiz{
+    margin-top: 16px;
+    margin-bottom: 85px;
+    width: 220px;
+    height: 44px;
+    font-weight: 400;
+    font-size: 21px;
+    color: #818181;
+    background-color: #ffffff;
+    border: none;
+}
+div.create ion-icon {
     position: absolute;
     font-size: 26px;
     top: 25px;
     right: 20px;
     opacity: 0;
 }
-div.create-questions.collapsed {
+div.create.collapsed {
     height: 74px;
 }
-div.create-questions.collapsed div:nth-of-type(2) {
+div.create.collapsed div:nth-of-type(2) {
     display: none;
 }
-div.create-questions.collapsed ion-icon {
+div.create.collapsed ion-icon {
     opacity: 1;
 }
-
-
+div.create.success {
+    width: 500px;
+    height: 266px;
+    padding: 0px;
+    position: relative;
+}
+div.create.success img {
+    width: 100%;
+    height: 100%;
+}
+div.create.success p {
+    position: absolute;
+    bottom: 9px;
+    left: 23px;
+    color: #ffffff;
+}
 
 
 

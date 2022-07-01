@@ -1,44 +1,64 @@
+// VARIABLES
 const apiURL = "https://mock-api.driven.com.br/api/v7/buzzquizz/quizzes"
-let lista  //lista com todos os quiz's
-let quizObject;
-let result = 0;
-let clicks = 0;
-let loadingScreen = {
+const loadingScreen = {
     e: document.querySelector('.loader-container'),
     show: () => loadingScreen.e.classList.remove('hidden'),
     hide: () => loadingScreen.e.classList.add('hidden')
 }
+const userStorage = {
+    set: {
+        id: (value) => userStorage.save(value, 'userIDs'),
+        key: (value) => userStorage.save(value, 'userKeys')
+    },
 
+    get: {
+        ids: () => JSON.parse(localStorage.getItem('userIDs')),
+        keys: () => JSON.parse(localStorage.getItem('userKeys'))
+    },
+
+    save: (value, key) => {
+        const userQuizzes = localStorage.getItem(key)
+
+        if (!userQuizzes) {
+            localStorage.setItem(key, `[${value}]`)
+        
+        } else {
+            const novoArray = JSON.parse(userQuizzes)
+            novoArray.push(value)
+            localStorage.setItem(key, JSON.stringify(novoArray))
+        }
+    }
+}
+let lista = [] // lista com todos os quiz's
+let quizObject;
+let result = 0;
+let clicks = 0;
+
+
+// FUNCTIONS
 const getQuizzes = async (quizId='') => {
     const response = await axios.get(`${apiURL}/${quizId}`)
 
     return response.data
 }
 
-const postQuiz = async () => {
-    const response = await axios.post(apiURL)
+
+const editQuiz = () => {
+    console.log('edit')
+}
+
+
+const deleteQuiz = () => {
+    console.log('delete')
+}
+
+
+// const postQuiz = async () => {
+//     const response = await axios.post(apiURL)
     
-    return response.data.id
-}
+//     return response.data.id
+// }
 
-const getUserQuizzesID = (key="userQuizzes") => {
-    return JSON.parse(localStorage.getItem(key))
-}
-
-const storeUserQuizID = (id, key="userQuizzes") => {
-    const userQuizzes = localStorage.getItem(key)
-
-    if (!userQuizzes) {
-        localStorage.setItem(key, `[${id}]`)
-    
-    } else {
-        const novoArray = JSON.parse(userQuizzes)
-        novoArray.push(id)
-        localStorage.setItem(key, JSON.stringify(novoArray))
-    }
-
-    console.log({localStorage: localStorage.userQuizzes})
-}
 
 const setQuizzes = async () => {
     loadingScreen.show()
@@ -46,24 +66,44 @@ const setQuizzes = async () => {
     loadingScreen.hide()
 }
 
-
 const renderQuizzes = async (quizzes) => {
     const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
     const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
-    const userQuizzesIds = getUserQuizzesID() || []
-    lista = quizzes
+    const userQuizzesIds = userStorage.get.ids() || []
 
     quizzes.forEach(quiz => {
+        lista.push(quiz)
         let container = allQuizzesContainer
         const isFromUser = userQuizzesIds.some(id => id === quiz.id)
+        const templates = {
+            default: `<li data-id="${quiz.id}">${quiz.title}</li>`, 
+            user: `
+                <li data-id="${quiz.id}">
+                    <span>${quiz.title}</span>
+                    <div class="options">
+                        <button onclick="editQuiz()">
+                            <ion-icon name="create-outline"></ion-icon>
+                        </button>
+                        <button onclick="deleteQuiz()">
+                            <ion-icon name="trash-outline"></ion-icon>
+                        </button>
+                    </div>
+                </li>`,
+        }
         
-        if (isFromUser) container = userQuizzesContainer
+        if (isFromUser) {
+            container = userQuizzesContainer
+            userQuizzesContainer.innerHTML += templates.user
+        
+        } else {
+            allQuizzesContainer.innerHTML += templates.default
+        }
 
-        container.innerHTML += `<li data-id="${quiz.id}">${quiz.title}</li>` 
-        const newQuiz = container.querySelector(':last-child')
+        const newQuiz = container.querySelector('li:last-child')
         newQuiz.style.backgroundImage = `url(${quiz.image})`
     });
 
+    // Mostrar container certo dependendo se o usuario criou quizzes ou não
     if (userQuizzesContainer.querySelector('li') !== null){
         document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
     
@@ -71,7 +111,7 @@ const renderQuizzes = async (quizzes) => {
         document.querySelector('.home .user-quizzes .empty').classList.remove('hidden')
     }
 
-    // Evento onclick
+    // Define evento onclick
     const allQuizzes = document.querySelectorAll('.quizzes-container li')
     allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
 }
@@ -181,10 +221,11 @@ function foiClicado (e) {
 }
 
 const backHome = () => {
-document.querySelector(".home").classList.remove("hidden")
-document.querySelector(".page02").classList.add("hidden")
-restartVar()
+    document.querySelector(".home").classList.remove("hidden")
+    document.querySelector(".page02").classList.add("hidden")
+    restartVar()
 }
+
 const restartButton = () => {
     document.querySelector(".question-options").scrollIntoView({block: "center", behavior: "smooth"});
     restartVar()
@@ -192,12 +233,12 @@ const restartButton = () => {
     exibirQuiz(quizObject.id, quizObject)
     
 }
-function restartVar () {
 
+function restartVar () {
     result = 0;
     clicks = 0;
-
 }
+
 function verifyResult(){
 
     total = Math.round((result/quizObject.questions.length) * 100)
@@ -226,6 +267,7 @@ function verifyResult(){
             }
     }   
 }
+
 function checkURL(string) {
     let url;
     try {
@@ -236,9 +278,22 @@ function checkURL(string) {
     if (url != false)
         return true;
 }
+function checkColor(string) {
+    for (let i=1 ; i<string.length ; i++)
+        if(isNaN(string[i]) && !(string[i] === "A" || string[i] === "B" || string[i] === "C" || string[i] === "D" || string[i] === "E" || string[i] === "F" || string[i] === "a" || string[i] === "b" || string[i] === "c" || string[i] === "d" || string[i] === "e" || string[i] === "f"))
+            return false;
+    
+    if(string.length != 7)
+        return false;
+    else if(string[0] != "#")
+        return false;
+    else
+        return true;    
+}
 
 
 // Inicialização
+loadingScreen.show()
 setQuizzes()
 
 let ordemCrescente = (a, b) => {

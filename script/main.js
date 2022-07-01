@@ -262,7 +262,9 @@ function verifyResult(){
                     
                     <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
                     <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
-                    `          
+                    `      
+                    
+                    return;
                 }  
             }
     }   

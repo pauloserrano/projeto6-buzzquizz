@@ -13,7 +13,14 @@ const userStorage = {
 
     get: {
         ids: () => JSON.parse(localStorage.getItem('userIDs')),
-        keys: () => JSON.parse(localStorage.getItem('userKeys'))
+        keys: () => JSON.parse(localStorage.getItem('userKeys')),
+        key: (id) => {
+            const ids = userStorage.get.ids()
+            const idIndex = ids.indexOf(id)
+            const quizKey = userStorage.get.keys()[idIndex]
+
+            return quizKey
+        }
     },
 
     save: (value, key) => {
@@ -38,26 +45,26 @@ let clicks = 0;
 // FUNCTIONS
 const getQuizzes = async (quizId='') => {
     const response = await axios.get(`${apiURL}/${quizId}`)
-
     return response.data
 }
 
 
-const editQuiz = () => {
-    console.log('edit')
+const editQuiz = async () => {
+    const quizElement = e.target.parentElement.parentElement
+    const quizID = Number(quizElement.dataset.id)
+    const quizKey = userStorage.get.key(quizID)
+
+    console.log({quizElement, quizID, quizKey})
 }
 
 
-const deleteQuiz = () => {
-    console.log('delete')
+const deleteQuiz = async () => {
+    const quizElement = e.target.parentElement.parentElement
+    const quizID = Number(quizElement.dataset.id)
+    const quizKey = userStorage.get.key(quizID)
+
+    console.log({quizElement, quizID, quizKey})
 }
-
-
-// const postQuiz = async () => {
-//     const response = await axios.post(apiURL)
-    
-//     return response.data.id
-// }
 
 
 const setQuizzes = async () => {
@@ -65,6 +72,7 @@ const setQuizzes = async () => {
     renderQuizzes(await getQuizzes())
     loadingScreen.hide()
 }
+
 
 const renderQuizzes = async (quizzes) => {
     const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
@@ -81,10 +89,10 @@ const renderQuizzes = async (quizzes) => {
                 <li data-id="${quiz.id}">
                     <span>${quiz.title}</span>
                     <div class="options">
-                        <button onclick="editQuiz()">
+                        <button>
                             <ion-icon name="create-outline"></ion-icon>
                         </button>
-                        <button onclick="deleteQuiz()">
+                        <button>
                             <ion-icon name="trash-outline"></ion-icon>
                         </button>
                     </div>
@@ -93,7 +101,7 @@ const renderQuizzes = async (quizzes) => {
         
         if (isFromUser) {
             container = userQuizzesContainer
-            userQuizzesContainer.innerHTML += templates.user
+            container.innerHTML += templates.user
         
         } else {
             allQuizzesContainer.innerHTML += templates.default
@@ -103,6 +111,29 @@ const renderQuizzes = async (quizzes) => {
         newQuiz.style.backgroundImage = `url(${quiz.image})`
     });
 
+    // Define evento onclick de abrir, editar e deletar
+    const allQuizzes = document.querySelectorAll('.quizzes-container li')
+    const userQuizzes = userQuizzesContainer.querySelectorAll('.options')
+
+    allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
+
+    if (userQuizzes){
+        userQuizzes.forEach(options => {
+            const editBtn = options.querySelector('button:first-child')
+            const deleteBtn = options.querySelector('button:nth-child(2)')
+            
+            editBtn.addEventListener('click', e => {
+                e.stopPropagation()
+                editQuiz()
+            })
+            deleteBtn.addEventListener('click', e => {
+                e.stopPropagation()
+                deleteQuiz()
+            })
+        })
+    }
+
+    
     // Mostrar container certo dependendo se o usuario criou quizzes ou não
     if (userQuizzesContainer.querySelector('li') !== null){
         document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
@@ -110,10 +141,6 @@ const renderQuizzes = async (quizzes) => {
     } else {
         document.querySelector('.home .user-quizzes .empty').classList.remove('hidden')
     }
-
-    // Define evento onclick
-    const allQuizzes = document.querySelectorAll('.quizzes-container li')
-    allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
 }
 
 
@@ -223,6 +250,7 @@ function foiClicado (e) {
 const backHome = () => {
     document.querySelector(".home").classList.remove("hidden")
     document.querySelector(".page02").classList.add("hidden")
+    document.querySelector(".creation").classList.add("hidden")
     restartVar()
 }
 

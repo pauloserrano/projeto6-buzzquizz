@@ -29,6 +29,7 @@ header h1{
     font-size: 37px;
     font-weight: bold;
     color: white;
+    cursor: pointer;
 }
 
 main.home{
@@ -143,7 +144,7 @@ main.home .quizzes-container li{
     word-break: break-word;
     font-size: 19px;
     color: white;
-    background-image: url(../imagens/teste.png);
+    background-color: black;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -192,6 +193,7 @@ main.home .user-quizzes .quizzes-container li div.options button ion-icon{
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: none;
 }
 
 

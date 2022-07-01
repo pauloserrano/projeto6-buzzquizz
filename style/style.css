@@ -96,9 +96,9 @@ main.home .user-quizzes .empty button:hover{
 .main-containner-quiz .question:hover,
 main.home .user-quizzes .empty button:hover,
 main.home .quizzes-container li:hover,
-main.home .user-quizzes .all-quizzes button:hover{
+main.home .user-quizzes .all-quizzes h2 button:hover{
     z-index: 1;
-    transform: scale(1.1);
+    transform: scale(1.05);
     transition: .3s all ease-in-out;
 }
 
@@ -106,14 +106,14 @@ main.home .user-quizzes .all-quizzes button:hover{
 .main-containner-quiz .question:not(:hover),
 main.home .user-quizzes .empty button:not(:hover),
 main.home .quizzes-container li:not(:hover),
-main.home .user-quizzes .all-quizzes button:not(:hover){
+main.home .user-quizzes .all-quizzes h2 button:not(:hover){
     transform: scale(1.0);
     transition: .3s all ease-in-out;
 }
 
-main.home .user-quizzes .all-quizzes button{
-    width: 30px;
-    height: 30px;
+main.home .user-quizzes .all-quizzes h2 button{
+    min-width: 30px;
+    min-height: 30px;
     position: relative;
     font-size: 24px;
     font-family: monospace;
@@ -161,6 +161,39 @@ main.home .quizzes-container li::after{
     pointer-events: none;
     z-index: -1;
 }
+
+main.home .user-quizzes .quizzes-container li div.options{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    top: 12px;
+    background-color: #EC362D; 
+    border-radius: 15px 0 0 15px;
+    overflow: hidden;
+}
+
+
+main.home .user-quizzes .quizzes-container li div.options button{
+    background-color: transparent;
+    padding: 8px;
+    border: transparent;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+main.home .user-quizzes .quizzes-container li div.options button:hover{
+    background-color: rgb(255, 255, 255, 0.25);
+    transition: .2s linear all;
+}
+
+main.home .user-quizzes .quizzes-container li div.options button ion-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 .page02{
     background-color: #FAFAFA;

@@ -249,7 +249,7 @@ function createQuizSuccess(postedQuiz) {
             <img src="${postedQuiz.data.image}">
             <p>${postedQuiz.data.title}</p>
         </div>
-        <button onclick="exibirQuiz(${quizId}, ${quizObj}">Acessar Quizz</button>
+        <button onclick="exibirQuiz(${quizId}, ${quizObj})">Acessar Quizz</button>
         <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
     `;
 

@@ -29,7 +29,7 @@ const userStorage = {
         }
     }
 }
-let lista  // lista com todos os quiz's
+let lista = [] // lista com todos os quiz's
 let quizObject;
 let result = 0;
 let clicks = 0;
@@ -38,11 +38,18 @@ let clicks = 0;
 // FUNCTIONS
 const getQuizzes = async (quizId='') => {
     const response = await axios.get(`${apiURL}/${quizId}`)
-    const quizzes = response.data
 
-    lista = quizzes
+    return response.data
+}
 
-    return quizzes
+
+const editQuiz = () => {
+    console.log('edit')
+}
+
+
+const deleteQuiz = () => {
+    console.log('delete')
 }
 
 
@@ -59,7 +66,6 @@ const setQuizzes = async () => {
     loadingScreen.hide()
 }
 
-
 const renderQuizzes = async (quizzes) => {
     const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
     const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
@@ -69,14 +75,35 @@ const renderQuizzes = async (quizzes) => {
         lista.push(quiz)
         let container = allQuizzesContainer
         const isFromUser = userQuizzesIds.some(id => id === quiz.id)
+        const templates = {
+            default: `<li data-id="${quiz.id}">${quiz.title}</li>`, 
+            user: `
+                <li data-id="${quiz.id}">
+                    <span>${quiz.title}</span>
+                    <div class="options">
+                        <button onclick="editQuiz()">
+                            <ion-icon name="create-outline"></ion-icon>
+                        </button>
+                        <button onclick="deleteQuiz()">
+                            <ion-icon name="trash-outline"></ion-icon>
+                        </button>
+                    </div>
+                </li>`,
+        }
         
-        if (isFromUser) container = userQuizzesContainer
+        if (isFromUser) {
+            container = userQuizzesContainer
+            userQuizzesContainer.innerHTML += templates.user
+        
+        } else {
+            allQuizzesContainer.innerHTML += templates.default
+        }
 
-        container.innerHTML += `<li data-id="${quiz.id}">${quiz.title}</li>` 
-        const newQuiz = container.querySelector(':last-child')
+        const newQuiz = container.querySelector('li:last-child')
         newQuiz.style.backgroundImage = `url(${quiz.image})`
     });
 
+    // Mostrar container certo dependendo se o usuario criou quizzes ou não
     if (userQuizzesContainer.querySelector('li') !== null){
         document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
     
@@ -84,7 +111,7 @@ const renderQuizzes = async (quizzes) => {
         document.querySelector('.home .user-quizzes .empty').classList.remove('hidden')
     }
 
-    // Evento onclick
+    // Define evento onclick
     const allQuizzes = document.querySelectorAll('.quizzes-container li')
     allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
 }

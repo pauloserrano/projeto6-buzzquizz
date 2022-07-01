@@ -54,17 +54,18 @@ const editQuiz = async (e) => {
     const quizID = Number(quizElement.dataset.id)
     const quizKey = userStorage.get.key(quizID)
     console.log(quizKey)
-    const headers = {
-        'Secret-Key': quizKey
-    }
-    // Você é um fã da marvel? (O quiz mais facil de todos os tempos)
-    let quiz = await getQuizzes(quizID)
-    quiz.title = 'Você é um fã da marvel? (O quiz mais difícil de todos os tempos)'
-    // => Joga o quiz de volta pra criação
-    let response = await axios.put(`${apiURL}/${quizID}`, quiz, { headers })
-    console.log(response)
 
-    console.log({quizElement, quizID, quizKey})
+    let quiz = await getQuizzes(quizID)
+
+    /* EDIÇÃO NA MÃO PARA TESTAR => O certo aqui é mandar o quiz para o processo de criação */
+    // title: Você é um fã da marvel? (O quiz mais facil de todos os tempos)
+    // quiz.title = 'Você é um fã da marvel? (O quiz mais difícil de todos os tempos)'
+
+    /* Descomentar abaixo depois que a parte de cima funcionar */
+    // delete quiz.id
+    // let response = await axios.put(`${apiURL}/${quizID}`, quiz, { headers: {'Secret-Key': quizKey} })
+
+    console.log({quiz, quizElement, quizID, quizKey, response})
 }
 
 

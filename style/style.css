@@ -385,31 +385,57 @@ main.creation button {
     height: 54px;
     color: #fff5f4;
     background-color: #EC362D;
+    font-size: 21px;
     border: transparent;
     border-radius: 15px;
-    margin: 50px auto 50px auto;
+    margin: 50px auto 10px auto;
 }
-main.creation div.create-questions input:nth-of-type(2n) {
+main.creation div.create.questions input:nth-of-type(2n) {
     margin-bottom: 32px;
 }
-div.create-questions ion-icon {
+main.creation button.button-home-quiz{
+    margin-top: 16px;
+    margin-bottom: 85px;
+    width: 220px;
+    height: 44px;
+    font-weight: 400;
+    font-size: 21px;
+    color: #818181;
+    background-color: #ffffff;
+    border: none;
+}
+div.create ion-icon {
     position: absolute;
     font-size: 26px;
     top: 25px;
     right: 20px;
     opacity: 0;
 }
-div.create-questions.collapsed {
+div.create.collapsed {
     height: 74px;
 }
-div.create-questions.collapsed div:nth-of-type(2) {
+div.create.collapsed div:nth-of-type(2) {
     display: none;
 }
-div.create-questions.collapsed ion-icon {
+div.create.collapsed ion-icon {
     opacity: 1;
 }
-
-
+div.create.success {
+    width: 500px;
+    height: 266px;
+    padding: 0px;
+    position: relative;
+}
+div.create.success img {
+    width: 100%;
+    height: 100%;
+}
+div.create.success p {
+    position: absolute;
+    bottom: 9px;
+    left: 23px;
+    color: #ffffff;
+}
 
 
 

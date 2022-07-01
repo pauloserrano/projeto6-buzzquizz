@@ -223,8 +223,11 @@ function checkLevels(createdLevels) {
 
 function postCreatedQuiz() {
     const promise = axios.post("https://mock-api.driven.com.br/api/v7/buzzquizz/quizzes",quiz);
+    loadingScreen.show()
     promise.then(createQuizSuccess);
+    loadingScreen.hide()
     //chamar tela de loading
+    // Opá, aqui é o Paulo, fiz pra ti essa parte já =)
 }
 function createQuizSuccess(postedQuiz) {
     console.log(postedQuiz.data);
@@ -232,6 +235,13 @@ function createQuizSuccess(postedQuiz) {
     const quizObj = postedQuiz.data;
     console.log(quizId);
     console.log(quizObj);
+
+    // Paulo: Armazenamento do id e key (não foi testado ainda mas deve funcionar)
+    userStorage.set.id(quizId)
+    userStorage.set.key(postedQuiz.data.key)
+
+    // Paulo: Renderização do novo quiz na home
+    renderQuizzes(postedQuiz)
 
     document.querySelector("main.creation").innerHTML = `
         <h3>Seu Quizz está pronto!</h3>

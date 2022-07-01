@@ -45,13 +45,11 @@ let clicks = 0;
 // FUNCTIONS
 const getQuizzes = async (quizId='') => {
     const response = await axios.get(`${apiURL}/${quizId}`)
-
     return response.data
 }
 
 
-const editQuiz = (e) => {
-    e.stopPropagation()
+const editQuiz = async () => {
     const quizElement = e.target.parentElement.parentElement
     const quizID = Number(quizElement.dataset.id)
     const quizKey = userStorage.get.key(quizID)
@@ -60,21 +58,13 @@ const editQuiz = (e) => {
 }
 
 
-const deleteQuiz = (e) => {
-    e.stopPropagation()
+const deleteQuiz = async () => {
     const quizElement = e.target.parentElement.parentElement
     const quizID = Number(quizElement.dataset.id)
     const quizKey = userStorage.get.key(quizID)
 
     console.log({quizElement, quizID, quizKey})
 }
-
-
-// const postQuiz = async () => {
-//     const response = await axios.post(apiURL)
-    
-//     return response.data.id
-// }
 
 
 const setQuizzes = async () => {
@@ -82,6 +72,7 @@ const setQuizzes = async () => {
     renderQuizzes(await getQuizzes())
     loadingScreen.hide()
 }
+
 
 const renderQuizzes = async (quizzes) => {
     const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
@@ -131,8 +122,14 @@ const renderQuizzes = async (quizzes) => {
             const editBtn = options.querySelector('button:first-child')
             const deleteBtn = options.querySelector('button:nth-child(2)')
             
-            editBtn.addEventListener('click', editQuiz)
-            deleteBtn.addEventListener('click', deleteQuiz)
+            editBtn.addEventListener('click', e => {
+                e.stopPropagation()
+                editQuiz()
+            })
+            deleteBtn.addEventListener('click', e => {
+                e.stopPropagation()
+                deleteQuiz()
+            })
         })
     }
 

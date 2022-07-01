@@ -8,6 +8,7 @@ let quiz = {
     questions: [],
     levels: []
 };
+let lastPostedQuiz = {};
 
 function startQuizCreation() {
     document.querySelector("main.home").classList.add("hidden");
@@ -23,6 +24,7 @@ function startQuizCreation() {
         <button onclick="createBasicInfo(this)">Prosseguir para criar perguntas</button>
     `;
     //colocar um função aqui para inserir os values nos inputs para editar
+    document.querySelector("main.creation").classList.remove("hidden");
 }
 function createBasicInfo(element) {
     const basicInfo = {
@@ -230,41 +232,33 @@ function postCreatedQuiz() {
     // Opá, aqui é o Paulo, fiz pra ti essa parte já =)
 }
 function createQuizSuccess(postedQuiz) {
-    console.log(postedQuiz.data);
-    const quizId = postedQuiz.data.id;
-    const quizObj = postedQuiz.data;
-    console.log(quizId);
-    console.log(quizObj);
+    
+    lastPostedQuiz = postedQuiz;
+    console.log(lastPostedQuiz.data);
+    console.log(lastPostedQuiz.data.id);
 
     // Paulo: Armazenamento do id e key (não foi testado ainda mas deve funcionar)
-    userStorage.set.id(quizId)
-    userStorage.set.key(postedQuiz.data.key)
+    userStorage.set.id(lastPostedQuiz.data.id);
+    userStorage.set.key(lastPostedQuiz.data.key);
 
     // Paulo: Renderização do novo quiz na home
-    renderQuizzes(postedQuiz)
+    renderQuizzes(lastPostedQuiz.data);
 
     document.querySelector("main.creation").innerHTML = `
         <h3>Seu Quizz está pronto!</h3>
         <div class="create success">
-            <img src="${postedQuiz.data.image}">
-            <p>${postedQuiz.data.title}</p>
+            <img src="${lastPostedQuiz.data.image}">
+            <p>${lastPostedQuiz.data.title}</p>
         </div>
-        <button onclick="exibirQuiz(${quizId}, ${quizObj})">Acessar Quizz</button>
+        <button class="open-created-quiz">Acessar Quizz</button>
         <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
     `;
+    document.querySelector("button.open-created-quiz").setAttribute("onclick",`exibirQuiz(lastPostedQuiz.data.id,lastPostedQuiz.data)`);
 
-    // Testar e corrigir o acesso ao quiz após término da criação e o voltar pra home
-
-    //Verificar a tela de jogar um quizz está dando níveis errados no fim
-
-    //media query para as telas de criação
-
-    //limpeza do obj quiz para receber um obj para edição
-
-    // quiz = {
-    //     title: "",
-    //     image: "",
-    //     questions: [],
-    //     levels: []
-    // };
+    quiz = {
+        title: "",
+        image: "",
+        questions: [],
+        levels: []
+    };
 }

@@ -270,6 +270,18 @@ function checkURL(string) {
     if (url != false)
         return true;
 }
+function checkColor(string) {
+    for (let i=1 ; i<string.length ; i++)
+        if(isNaN(string[i]) && !(string[i] === "A" || string[i] === "B" || string[i] === "C" || string[i] === "D" || string[i] === "E" || string[i] === "F" || string[i] === "a" || string[i] === "b" || string[i] === "c" || string[i] === "d" || string[i] === "e" || string[i] === "f"))
+            return false;
+    
+    if(string.length != 7)
+        return false;
+    else if(string[0] != "#")
+        return false;
+    else
+        return true;    
+}
 
 
 // Inicialização

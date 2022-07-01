@@ -1,3 +1,7 @@
+function collapseDiv(element) {
+    element.parentNode.classList.toggle("collapsed");
+}
+
 let quiz = {
     title: "",
     image: "",
@@ -105,11 +109,11 @@ function createQuestions(element) {
             if(questionElm.querySelector(`input:nth-of-type(${3+j*2})`).value.length > 0 && questionElm.querySelector(`input:nth-of-type(${4+j*2})`).value.length > 0) {
                 let jtext = questionElm.querySelector(`input:nth-of-type(${3+j*2})`).value;
                 let jimage = questionElm.querySelector(`input:nth-of-type(${4+j*2})`).value;
-                createdAnswers[j] = {
+                createdAnswers.push({
                     text: jtext,
                     image: jimage,
                     isCorrectAnswer: (j===0),
-                };
+                });
             }
         }
 
@@ -121,30 +125,33 @@ function createQuestions(element) {
     }
     
     console.log(createdQuestions);
-    //if(checkQuestions(createdQuestions))
+    if(checkQuestions(createdQuestions)) {
+        quiz.questions = createdQuestions;
+        console.log(quiz);
+        startLevelsCreation();
+    } else
+        alert("Dados incorretos!");
 }
-// function checkQuestions(createdQuestions) {
-//     for (let i=0 ; i<createdQuestions.length ; i++) {
-//         if (createdQuestions[i].title.length < 20)
-//             return false;
-//         if (!isColor(createdQuestions[i].title))
-//             return false;
+function checkQuestions(createdQuestions) {
 
-//         for (let j=0 ; j<createdQuestions[i].answers.length ; j++)
-//             if(j<createdQuestions[i].answers[j].)
+    for (let i=0 ; i<createdQuestions.length ; i++) {
+        
+        if (createdQuestions[i].title.length < 20)
+            return false;
+        if (!checkColor(createdQuestions[i].color))
+            return false;
+        if (createdQuestions[i].answers.length < 2)
+            return false;
+        if(createdQuestions[i].answers[0].isCorrectAnswer === false)
+            return false;
 
+        for (let j=0 ; j<createdQuestions[i].answers.length ; j++)
+                    if(!checkURL(createdQuestions[i].answers[j].image))
+                        return false;
+    }
+    return true;
+}
 
-
-//     }
-
-// }
-
-
-// function isColor(string) {
-
-// }
-
-
-function collapseDiv(element) {
-    element.parentNode.classList.toggle("collapsed");
+function startLevelsCreation() {
+    console.log("LEvelsss");
 }

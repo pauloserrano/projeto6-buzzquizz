@@ -144,7 +144,7 @@ main.home .quizzes-container li{
     word-break: break-word;
     font-size: 19px;
     color: white;
-    background-image: url(../imagens/teste.png);
+    background-color: black;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

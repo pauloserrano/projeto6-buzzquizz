@@ -222,14 +222,16 @@ function checkLevels(createdLevels) {
 }
 
 function postCreatedQuiz() {
-    const promise = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes",quiz);
+    const promise = axios.post("https://mock-api.driven.com.br/api/v7/buzzquizz/quizzes",quiz);
     promise.then(createQuizSuccess);
     //chamar tela de loading
 }
 function createQuizSuccess(postedQuiz) {
     console.log(postedQuiz.data);
     const quizId = postedQuiz.data.id;
+    const quizObj = postedQuiz.data;
     console.log(quizId);
+    console.log(quizObj);
 
     document.querySelector("main.creation").innerHTML = `
         <h3>Seu Quizz está pronto!</h3>
@@ -237,11 +239,18 @@ function createQuizSuccess(postedQuiz) {
             <img src="${postedQuiz.data.image}">
             <p>${postedQuiz.data.title}</p>
         </div>
-        <button onclick="exibirQuiz(${quizId},${quiz})">Acessar Quizz</button>
+        <button onclick="exibirQuiz(quizId,quizObj">Acessar Quizz</button>
         <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
     `;
 
-    // Testar e corrigir o acesso ao quiz após término da criaçãoe o voltar pra home
+    // Testar e corrigir o acesso ao quiz após término da criação e o voltar pra home
+
+    //Verificar a tela de jogar um quizz está dando níveis errados no fim
+
+    //media query para as telas de criação
+
+    //limpeza do obj quiz para receber um obj para edição
+
     // quiz = {
     //     title: "",
     //     image: "",

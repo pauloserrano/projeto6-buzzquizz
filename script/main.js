@@ -24,7 +24,7 @@ const userStorage = {
     },
 
     save: (value, key) => {
-        const userQuizzes = localStorage.getItem(key)
+        const userQuizzes = localStorage.getItem(key).replace('[', '["').replace(']', '"]')
 
         if (!userQuizzes) {
             localStorage.setItem(key, `[${value}]`)

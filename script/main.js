@@ -18,7 +18,7 @@ const userStorage = {
             const ids = userStorage.get.ids()
             const idIndex = ids.indexOf(id)
             const quizKey = userStorage.get.keys()[idIndex]
-            
+
             return quizKey
         }
     },
@@ -56,14 +56,17 @@ const editQuiz = (e) => {
     const quizID = Number(quizElement.dataset.id)
     const quizKey = userStorage.get.key(quizID)
 
-    console.log({quizLi, quizID, quizKey})
+    console.log({quizElement, quizID, quizKey})
 }
 
 
 const deleteQuiz = (e) => {
     e.stopPropagation()
-    const quizLi = e.target.parentElement.parentElement
-    console.log('delete')
+    const quizElement = e.target.parentElement.parentElement.parentElement
+    const quizID = Number(quizElement.dataset.id)
+    const quizKey = userStorage.get.key(quizID)
+
+    console.log({quizElement, quizID, quizKey})
 }
 
 
@@ -98,7 +101,7 @@ const renderQuizzes = async (quizzes) => {
                         <button>
                             <ion-icon name="create-outline"></ion-icon>
                         </button>
-                        <button onclick="deleteQuiz(this)">
+                        <button>
                             <ion-icon name="trash-outline"></ion-icon>
                         </button>
                     </div>

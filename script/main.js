@@ -13,7 +13,7 @@ const userStorage = {
 
     get: {
         ids: () => JSON.parse(localStorage.getItem('userIDs')),
-        keys: () => JSON.parse(localStorage.getItem('userKeys')),
+        keys: () => JSON.parse(localStorage.getItem('userKeys').replace('[', '["').replace(']', '"]')),
         key: (id) => {
             const ids = userStorage.get.ids()
             const idIndex = ids.indexOf(id)
@@ -49,16 +49,26 @@ const getQuizzes = async (quizId='') => {
 }
 
 
-const editQuiz = async () => {
+const editQuiz = async (e) => {
     const quizElement = e.target.parentElement.parentElement
     const quizID = Number(quizElement.dataset.id)
     const quizKey = userStorage.get.key(quizID)
+    console.log(quizKey)
+    const headers = {
+        'Secret-Key': quizKey
+    }
+    // Você é um fã da marvel? (O quiz mais facil de todos os tempos)
+    let quiz = await getQuizzes(quizID)
+    quiz.title = 'Você é um fã da marvel? (O quiz mais difícil de todos os tempos)'
+    // => Joga o quiz de volta pra criação
+    let response = await axios.put(`${apiURL}/${quizID}`, quiz, { headers })
+    console.log(response)
 
     console.log({quizElement, quizID, quizKey})
 }
 
 
-const deleteQuiz = async () => {
+const deleteQuiz = async (e) => {
     const quizElement = e.target.parentElement.parentElement
     const quizID = Number(quizElement.dataset.id)
     const quizKey = userStorage.get.key(quizID)
@@ -124,11 +134,11 @@ const renderQuizzes = async (quizzes) => {
             
             editBtn.addEventListener('click', e => {
                 e.stopPropagation()
-                editQuiz()
+                editQuiz(e)
             })
             deleteBtn.addEventListener('click', e => {
                 e.stopPropagation()
-                deleteQuiz()
+                deleteQuiz(e)
             })
         })
     }

@@ -13,7 +13,14 @@ const userStorage = {
 
     get: {
         ids: () => JSON.parse(localStorage.getItem('userIDs')),
-        keys: () => JSON.parse(localStorage.getItem('userKeys'))
+        keys: () => JSON.parse(localStorage.getItem('userKeys')),
+        key: (id) => {
+            const ids = userStorage.get.ids()
+            const idIndex = ids.indexOf(id)
+            const quizKey = userStorage.get.keys()[idIndex]
+            
+            return quizKey
+        }
     },
 
     save: (value, key) => {
@@ -43,12 +50,19 @@ const getQuizzes = async (quizId='') => {
 }
 
 
-const editQuiz = () => {
-    console.log('edit')
+const editQuiz = (e) => {
+    e.stopPropagation()
+    const quizElement = e.target.parentElement.parentElement.parentElement
+    const quizID = Number(quizElement.dataset.id)
+    const quizKey = userStorage.get.key(quizID)
+
+    console.log({quizLi, quizID, quizKey})
 }
 
 
-const deleteQuiz = () => {
+const deleteQuiz = (e) => {
+    e.stopPropagation()
+    const quizLi = e.target.parentElement.parentElement
     console.log('delete')
 }
 
@@ -81,10 +95,10 @@ const renderQuizzes = async (quizzes) => {
                 <li data-id="${quiz.id}">
                     <span>${quiz.title}</span>
                     <div class="options">
-                        <button onclick="editQuiz()">
+                        <button>
                             <ion-icon name="create-outline"></ion-icon>
                         </button>
-                        <button onclick="deleteQuiz()">
+                        <button onclick="deleteQuiz(this)">
                             <ion-icon name="trash-outline"></ion-icon>
                         </button>
                     </div>
@@ -93,7 +107,7 @@ const renderQuizzes = async (quizzes) => {
         
         if (isFromUser) {
             container = userQuizzesContainer
-            userQuizzesContainer.innerHTML += templates.user
+            container.innerHTML += templates.user
         
         } else {
             allQuizzesContainer.innerHTML += templates.default
@@ -101,8 +115,21 @@ const renderQuizzes = async (quizzes) => {
 
         const newQuiz = container.querySelector('li:last-child')
         newQuiz.style.backgroundImage = `url(${quiz.image})`
+        
+        // Define evento onclick de edição e delete
+        if (isFromUser){
+            const editBtn = newQuiz.querySelector('.options button:first-child')
+            const deleteBtn = newQuiz.querySelector('.options button:nth-child(2)')
+            
+            editBtn.addEventListener('click', editQuiz)
+            deleteBtn.addEventListener('click', deleteQuiz)
+        }
     });
 
+    // Define evento onclick geral
+    const allQuizzes = document.querySelectorAll('.quizzes-container li')
+    allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
+    
     // Mostrar container certo dependendo se o usuario criou quizzes ou não
     if (userQuizzesContainer.querySelector('li') !== null){
         document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
@@ -110,10 +137,6 @@ const renderQuizzes = async (quizzes) => {
     } else {
         document.querySelector('.home .user-quizzes .empty').classList.remove('hidden')
     }
-
-    // Define evento onclick
-    const allQuizzes = document.querySelectorAll('.quizzes-container li')
-    allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
 }
 
 

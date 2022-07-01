@@ -1,44 +1,57 @@
+// VARIABLES
 const apiURL = "https://mock-api.driven.com.br/api/v7/buzzquizz/quizzes"
-let lista  //lista com todos os quiz's
-let quizObject;
-let result = 0;
-let clicks = 0;
-let loadingScreen = {
+const loadingScreen = {
     e: document.querySelector('.loader-container'),
     show: () => loadingScreen.e.classList.remove('hidden'),
     hide: () => loadingScreen.e.classList.add('hidden')
 }
+const userStorage = {
+    set: {
+        id: (value) => userStorage.save(value, 'userIDs'),
+        key: (value) => userStorage.save(value, 'userKeys')
+    },
 
+    get: {
+        ids: () => JSON.parse(localStorage.getItem('userIDs')),
+        keys: () => JSON.parse(localStorage.getItem('userKeys'))
+    },
+
+    save: (value, key) => {
+        const userQuizzes = localStorage.getItem(key)
+
+        if (!userQuizzes) {
+            localStorage.setItem(key, `[${value}]`)
+        
+        } else {
+            const novoArray = JSON.parse(userQuizzes)
+            novoArray.push(value)
+            localStorage.setItem(key, JSON.stringify(novoArray))
+        }
+    }
+}
+let lista  // lista com todos os quiz's
+let quizObject;
+let result = 0;
+let clicks = 0;
+
+
+// FUNCTIONS
 const getQuizzes = async (quizId='') => {
     const response = await axios.get(`${apiURL}/${quizId}`)
+    const quizzes = response.data
 
-    return response.data
+    lista = quizzes
+
+    return quizzes
 }
 
-const postQuiz = async () => {
-    const response = await axios.post(apiURL)
+
+// const postQuiz = async () => {
+//     const response = await axios.post(apiURL)
     
-    return response.data.id
-}
+//     return response.data.id
+// }
 
-const getUserQuizzesID = (key="userQuizzes") => {
-    return JSON.parse(localStorage.getItem(key))
-}
-
-const storeUserQuizID = (id, key="userQuizzes") => {
-    const userQuizzes = localStorage.getItem(key)
-
-    if (!userQuizzes) {
-        localStorage.setItem(key, `[${id}]`)
-    
-    } else {
-        const novoArray = JSON.parse(userQuizzes)
-        novoArray.push(id)
-        localStorage.setItem(key, JSON.stringify(novoArray))
-    }
-
-    console.log({localStorage: localStorage.userQuizzes})
-}
 
 const setQuizzes = async () => {
     loadingScreen.show()
@@ -50,10 +63,10 @@ const setQuizzes = async () => {
 const renderQuizzes = async (quizzes) => {
     const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
     const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
-    const userQuizzesIds = getUserQuizzesID() || []
-    lista = quizzes
+    const userQuizzesIds = userStorage.get.ids() || []
 
     quizzes.forEach(quiz => {
+        lista.push(quiz)
         let container = allQuizzesContainer
         const isFromUser = userQuizzesIds.some(id => id === quiz.id)
         
@@ -96,7 +109,6 @@ function exibirQuiz (quizId, quizObj){
     console.log(quizObj)
     document.body.scrollIntoView()
 
-    document.querySelector(".home").classList.add("hidden")
     document.querySelector(".home").classList.add("hidden")
     document.querySelector(".page02").classList.remove("hidden")
 
@@ -181,10 +193,11 @@ function foiClicado (e) {
 }
 
 const backHome = () => {
-document.querySelector(".home").classList.remove("hidden")
-document.querySelector(".page02").classList.add("hidden")
-restartVar()
+    document.querySelector(".home").classList.remove("hidden")
+    document.querySelector(".page02").classList.add("hidden")
+    restartVar()
 }
+
 const restartButton = () => {
     document.querySelector(".question-options").scrollIntoView({block: "center", behavior: "smooth"});
     restartVar()
@@ -192,12 +205,12 @@ const restartButton = () => {
     exibirQuiz(quizObject.id, quizObject)
     
 }
-function restartVar () {
 
+function restartVar () {
     result = 0;
     clicks = 0;
-
 }
+
 function verifyResult(){
 
     total = Math.round((result/quizObject.questions.length) * 100)
@@ -268,6 +281,7 @@ function verifyResult(){
             }
     }   
 }
+
 function checkURL(string) {
     let url;
     try {
@@ -281,6 +295,7 @@ function checkURL(string) {
 
 
 // Inicialização
+loadingScreen.show()
 setQuizzes()
 
 let ordemCrescente = (a, b) => {

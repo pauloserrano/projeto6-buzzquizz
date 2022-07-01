@@ -31,7 +31,6 @@ function createBasicInfo(element) {
         nquestions: `${element.parentNode.querySelector("input:nth-of-type(3)").value}`,
         nlevels: `${element.parentNode.querySelector("input:nth-of-type(4)").value}`,
     };
-    console.log(checkBasicInfo(basicInfo));
 
     if (checkBasicInfo(basicInfo)) {
         quiz.title = basicInfo.title;
@@ -66,7 +65,7 @@ function startQuestionsCreation() {
     
     for (let i=0 ; i<quiz.questions.length ; i++)
         document.querySelector("main.creation").innerHTML += `
-            <div class="create-questions collapsed">
+            <div class="create questions collapsed">
                 <div onclick="collapseDiv(this)">
                     <h2>Pergunta ${i+1}</h2>
                 </div>
@@ -102,7 +101,7 @@ function createQuestions(element) {
     let questionElm;
 
     for (let i=0 ; i<quiz.questions.length ; i++) {
-        questionElm = element.parentNode.querySelector(`div.create-questions:nth-of-type(${i+1})`);
+        questionElm = element.parentNode.querySelector(`div.create.questions:nth-of-type(${i+1})`);
 
         createdAnswers = [];
         for (j=0 ; j<4 ; j++) {
@@ -124,7 +123,6 @@ function createQuestions(element) {
         };
     }
     
-    console.log(createdQuestions);
     if(checkQuestions(createdQuestions)) {
         quiz.questions = createdQuestions;
         console.log(quiz);
@@ -153,5 +151,101 @@ function checkQuestions(createdQuestions) {
 }
 
 function startLevelsCreation() {
-    console.log("LEvelsss");
+    
+    document.querySelector("main.creation").innerHTML = '<h3>Agora, decida os níveis</h3>';
+    for (let i=0 ; i<quiz.levels.length ; i++)
+        document.querySelector("main.creation").innerHTML += `
+            <div class="create collapsed">
+                <div onclick="collapseDiv(this)">
+                    <h2>Nível ${i+1}</h2>
+                </div>
+                <ion-icon onclick="collapseDiv(this)" name="create-outline"></ion-icon>
+                <div>
+                    <input placeholder="Título do nível" type="text">
+                    <input placeholder="% de acerto mínima" type="text">
+                    <input placeholder="URL da imagem do nível" type="text">
+                    <input placeholder="Descrição do nível" type="text">
+                </div>                
+            </div>
+        `;
+        document.querySelector("main.creation div:first-of-type").classList.remove("collapsed");
+        document.querySelector("main.creation").innerHTML += `
+            <button onclick="createLevels(this)">Finalizar Quiz</button>
+       `;
+    //Criar função aqui para preencher os dados em caso de edição
+}
+function createLevels(element) {
+    let createdLevels = [];
+    
+    let levelElm;
+    for (let i=0 ; i<quiz.levels.length ; i++) {
+        levelElm = element.parentNode.querySelector(`div.create:nth-of-type(${i+1})`);
+
+        createdLevels[i] = {
+            title: `${levelElm.querySelector("input:nth-of-type(1)").value}`,
+            minValue: `${levelElm.querySelector("input:nth-of-type(2)").value}`,
+            image: `${levelElm.querySelector("input:nth-of-type(3)").value}`,
+            text: `${levelElm.querySelector("input:nth-of-type(4)").value}`,
+        };
+    }
+
+    console.log(createdLevels);
+    if(checkLevels(createdLevels)) {
+        quiz.levels = createdLevels;
+        console.log(quiz);
+        postCreatedQuiz();
+    } else
+        alert("Dados incorretos!");
+}
+function checkLevels(createdLevels) {
+
+    let lvlzero = false;
+    for (let i=0 ; i<createdLevels.length ; i++) {
+        
+        if(createdLevels[i].title.length < 10)
+            return false;
+        if(isNaN(createdLevels[i].minValue) || createdLevels[i].minValue < 0 || createdLevels[i].minValue > 100)
+            return false;
+        if(!checkURL(createdLevels[i].image))
+            return false;
+        if(createdLevels[i].text.length < 30)
+            return false;
+
+        if(createdLevels[i].minValue === "0")
+            lvlzero = true;
+    }
+
+    if(!lvlzero)
+        return false;
+    else
+        return true;
+}
+
+function postCreatedQuiz() {
+    const promise = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes",quiz);
+    promise.then(createQuizSuccess);
+    //chamar tela de loading
+}
+function createQuizSuccess(postedQuiz) {
+    console.log(postedQuiz.data);
+    const quizId = postedQuiz.data.id;
+    console.log(quizId);
+
+    document.querySelector("main.creation").innerHTML = `
+        <h3>Seu Quizz está pronto!</h3>
+        <div class="create success">
+            <img src="${postedQuiz.data.image}">
+            <p>${postedQuiz.data.title}</p>
+        </div>
+        <button onclick="exibirQuiz(${quizId},${quiz})">Acessar Quizz</button>
+        <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
+    `;
+
+    // Testar e corrigir o acesso ao quiz após término da criaçãoe o voltar pra home
+    // quiz = {
+    //     title: "",
+    //     image: "",
+    //     questions: [],
+    //     levels: []
+    // };
 }

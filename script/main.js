@@ -3,7 +3,11 @@ let lista  //lista com todos os quiz's
 let quizObject;
 let result = 0;
 let clicks = 0;
-
+let loadingScreen = {
+    e: document.querySelector('.loader-container'),
+    show: () => loadingScreen.e.classList.remove('hidden'),
+    hide: () => loadingScreen.e.classList.add('hidden')
+}
 
 const getQuizzes = async (quizId='') => {
     const response = await axios.get(`${apiURL}/${quizId}`)
@@ -37,7 +41,9 @@ const storeUserQuizID = (id, key="userQuizzes") => {
 }
 
 const setQuizzes = async () => {
+    loadingScreen.show()
     renderQuizzes(await getQuizzes())
+    loadingScreen.hide()
 }
 
 
@@ -76,7 +82,9 @@ const openQuiz = async (e) => {
     let quiz;
     console.log(quizId)
 
+    loadingScreen.show()
     quiz = await axios.get(`${apiURL}/${quizId}`)
+    loadingScreen.hide()
 
     exibirQuiz(quizId, quiz.data)
 

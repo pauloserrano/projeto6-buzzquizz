@@ -426,4 +426,64 @@ div.create-questions.collapsed ion-icon {
     main.home .user-quizzes .all-quizzes h2{
         justify-content: space-between  ;
     }
+
+
+
+    .containner-quiz{
+        width: 100%;
+    }
+    .question-options img{
+        width: 163px;
+        height: 113px;
+    }
+    .question-options span{
+        font-size: 13px;
+        width: 163px;
+        height: 113px;
+    }    
+    .question{
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        font-weight: 700;
+        font-size: 20px;
+        margin: 9px 12px;
+    }
+    .question span{
+        width: 163px;
+    }
+    .question-quiz{
+        width: 100%;
+        height: 89px;
+        font-size: 19px;       
+    }
+
+    .containner-result-quiz{ 
+
+        width: 100%;
+        height: 500px;
+
+    }
+    
+    .info-quiz{
+        width: 100%;
+        height: 99px;  
+        font-size: 19px;
+    }
+    .result-quiz{
+        width: 100%;
+        display: inherit;
+        
+    }
+    .containner-result-quiz span{
+        max-width: 90%;
+        font-weight: 700;
+        font-size: 17px;
+    }
+    .containner-result-quiz img{
+    
+        width: 340px;
+        height: 255px;
+    
+    }
 }

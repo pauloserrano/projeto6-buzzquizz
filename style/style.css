@@ -472,18 +472,18 @@ div.create-questions.collapsed ion-icon {
     }
     .result-quiz{
         width: 100%;
-        display: inherit;
+        flex-direction: column;
         
     }
-    .containner-result-quiz span{
+    .result-quiz span{
         max-width: 90%;
-        font-weight: 700;
+        width: 90%;
         font-size: 17px;
     }
-    .containner-result-quiz img{
+    .result-quiz img{
     
-        width: 340px;
-        height: 255px;
+        width: 90%;
+        height: 67.5%;
     
     }
 }

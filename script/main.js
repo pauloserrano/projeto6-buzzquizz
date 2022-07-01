@@ -97,7 +97,7 @@ function exibirQuiz (quizId, quizObj){
     document.body.scrollIntoView()
 
     document.querySelector(".home").classList.add("hidden")
-    document.querySelector(".home").classList.add("hidden")
+    document.querySelector(".creation").classList.add("hidden")
     document.querySelector(".page02").classList.remove("hidden")
 
     document.querySelector(".page02").innerHTML = 
@@ -202,69 +202,27 @@ function verifyResult(){
 
     total = Math.round((result/quizObject.questions.length) * 100)
 
-    quizObject.levels.sort(ordemCrescente)
-
     if (clicks === quizObject.questions.length){
+
+        quizObject.levels.sort(ordemCrescente)
+        console.log (quizObject)
         
-        
-            if ( total >= quizObject.levels[quizObject.levels.length - 1].minValue){
-                document.querySelector(".page02").innerHTML +=`
-                <div class="containner-result-quiz">
-                <div class="info-quiz">${total}% de acerto: ${quizObject.levels[quizObject.levels.length - 1].title}</div>
-        
-                <div class="result-quiz">
-                    <img src="${quizObject.levels[quizObject.levels.length - 1].image}" alt="">
-                    <span>${quizObject.levels[quizObject.levels.length - 1].text}</span>
-                </div>
-                </div>
-                
-                <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
-                <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
-                `          
-            }  else if (total >= quizObject.levels.length - 2) {
-                document.querySelector(".page02").innerHTML +=`
-                <div class="containner-result-quiz">
-                <div class="info-quiz">${total}% de acerto: ${quizObject.levels[quizObject.levels.length - 2].title}</div>
-        
-                <div class="result-quiz">
-                    <img src="${quizObject.levels[quizObject.levels.length - 2].image}" alt="">
-                    <span>${quizObject.levels[quizObject.levels.length - 2].text}</span>
-                </div>
-                </div>
-                
-                <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
-                <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
-                `          
-            }  
-            else if (total >= quizObject.levels.length - 3) {
-                document.querySelector(".page02").innerHTML +=`
-                <div class="containner-result-quiz">
-                <div class="info-quiz">${total}% de acerto: ${quizObject.levels[quizObject.levels.length - 3].title}</div>
-        
-                <div class="result-quiz">
-                    <img src="${quizObject.levels[quizObject.levels.length - 3].image}" alt="">
-                    <span>${quizObject.levels[quizObject.levels.length - 3].text}</span>
-                </div>
-                </div>
-                
-                <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
-                <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
-                `           
-            }  
-            else {
-                document.querySelector(".page02").innerHTML +=`
-                <div class="containner-result-quiz">
-                <div class="info-quiz">${total}% de acerto: ${quizObject.levels[quizObject.levels.length - 4].title}</div>
-        
-                <div class="result-quiz">
-                    <img src="${quizObject.levels[quizObject.levels.length - 4].image}" alt="">
-                    <span>${quizObject.levels[quizObject.levels.length - 4].text}</span>
-                </div>
-                </div>
-                
-                <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
-                <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
-                `
+            for( let i = 1; i < quizObject.levels.length + 1; i++){
+                if ( total >= quizObject.levels[quizObject.levels.length - i].minValue){
+                    document.querySelector(".page02").innerHTML +=`
+                    <div class="containner-result-quiz">
+                    <div class="info-quiz">${total}% de acerto: ${quizObject.levels[quizObject.levels.length - i].title}</div>
+            
+                    <div class="result-quiz">
+                        <img src="${quizObject.levels[quizObject.levels.length - i].image}" alt="">
+                        <span>${quizObject.levels[quizObject.levels.length - i].text}</span>
+                    </div>
+                    </div>
+                    
+                    <button class="button-restart-quiz" onclick="restartButton()">Reiniciar Quizz</button>
+                    <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
+                    `          
+                }  
             }
     }   
 }

@@ -256,6 +256,7 @@ main.home .user-quizzes .quizzes-container li div.options button ion-icon{
 .question-options img{
     width: 329px;
     height: 175px;
+    object-fit: cover
 }
 
 .question{
@@ -487,13 +488,29 @@ div.create.success p {
     }
 
 
-
+    .main-containner-quiz{
+        width: 100%;
+    }
     .containner-quiz{
         width: 100%;
+    }
+    .banner-quiz span {
+        font-size: 19px;
+        max-width: 100%;
+    }
+    .banner-quiz div {
+ 
+        width: 100%;
+    }
+    .question-options{
+        width: 100%;
+        height: 113px;
+    
     }
     .question-options img{
         width: 163px;
         height: 113px;
+    
     }
     .question-options span{
         font-size: 13px;
@@ -507,6 +524,7 @@ div.create.success p {
         font-weight: 700;
         font-size: 20px;
         margin: 9px 12px;
+        margin: 0 10px;
     }
     .question span{
         width: 163px;

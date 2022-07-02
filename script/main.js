@@ -92,12 +92,11 @@ const renderQuizzes = async (quizzes) => {
 
     quizzes.forEach(quiz => {
         lista.push(quiz)
-        let container = allQuizzesContainer
         const isFromUser = userQuizzesIds.some(id => id === quiz.id)
         const templates = {
-            default: `<li data-id="${quiz.id}">${quiz.title}</li>`, 
+            default: `<li data-id="${quiz.id}" style="background-image: url(${quiz.image})">${quiz.title}</li>`, 
             user: `
-                <li data-id="${quiz.id}">
+                <li data-id="${quiz.id}" style="background-image: url(${quiz.image})">
                     <span>${quiz.title}</span>
                     <div class="options">
                         <button>
@@ -110,24 +109,15 @@ const renderQuizzes = async (quizzes) => {
                 </li>`,
         }
         
-        if (isFromUser) {
-            container = userQuizzesContainer
-            container.innerHTML += templates.user
-        
-        } else {
-            allQuizzesContainer.innerHTML += templates.default
-        }
-
-        const newQuiz = container.querySelector('li:last-child')
-        newQuiz.style.backgroundImage = `url(${quiz.image})`
+        if (isFromUser) userQuizzesContainer.innerHTML += templates.user
+        else allQuizzesContainer.innerHTML += templates.default
     });
 
     // Define evento onclick de abrir, editar e deletar
     const allQuizzes = document.querySelectorAll('.quizzes-container li')
-    const userQuizzes = userQuizzesContainer.querySelectorAll('.options')
-
     allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
 
+    const userQuizzes = userQuizzesContainer.querySelectorAll('.options')
     if (userQuizzes){
         userQuizzes.forEach(options => {
             const editBtn = options.querySelector('button:first-child')

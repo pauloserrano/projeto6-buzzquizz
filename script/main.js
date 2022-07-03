@@ -112,7 +112,6 @@ const deleteQuiz = async (e) => {
     userStorage.update(quizID)
     setQuizzes()
     loadingScreen.hide()
-
     console.log({quizElement, quizID, quizKey, response})
 }
 
@@ -174,7 +173,7 @@ const renderUserQuizzes = (userQuizzes) => {
             option.querySelector('button:nth-child(2)')
                 .addEventListener('click', e => {
                     e.stopPropagation()
-                    deleteQuiz(e)
+                    if (confirm('Tem certeza que deseja apagar este quiz?')) deleteQuiz(e)
             })
         })
 

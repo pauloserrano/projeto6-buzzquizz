@@ -19,7 +19,6 @@ header{
     top: 0;
     width: 100%;
     height: 70px;
-    margin-bottom: 70px;
     background-color: #EC362D;
     z-index: 2;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -34,7 +33,7 @@ header h1{
 
 main.home{
     max-width: 1050px;
-    margin: 0 auto;
+    margin: 70px auto 0;
 }
 
 main.home > *, .empty{
@@ -201,7 +200,6 @@ main.home .user-quizzes .quizzes-container li div.options button ion-icon{
     pointer-events: none;
 }
 
-
 .page02{
     background-color: #FAFAFA;
     width: 100%;
@@ -211,9 +209,9 @@ main.home .user-quizzes .quizzes-container li div.options button ion-icon{
     align-items: center;
     justify-content: center;
     font-family: 'Roboto', sans-serif;
-    margin-top: -70px;
 
 }
+
 .banner-quiz{
     width: 100%;
     display: flex;
@@ -222,17 +220,18 @@ main.home .user-quizzes .quizzes-container li div.options button ion-icon{
     justify-content: center;
     margin-bottom: 42px;
 }
+
 .banner-quiz img{
     position: relative;
     width: 100%;
-    height: 227px;
+    height: 230px;
     object-fit: cover;
     filter: brightness(.4);
 }
 
 .banner-quiz h2{
     position: absolute;
-    font-size: 39px;
+    font-size: 40px;
     color: white;
     padding: 0 16px;
     z-index: 1;
@@ -340,14 +339,12 @@ main.home .user-quizzes .quizzes-container li div.options button ion-icon{
     font-weight: 700;
     font-size: 20px;
     word-break: break-all;
-
 }
 
 .containner-result-quiz img{
     width: 100%;
     height: 275px;
     object-fit: cover;
-
 }
 
 .button-restart-quiz, .button-home-quiz{
@@ -381,7 +378,7 @@ main.creation {
     display: flex;
     flex-direction: column;
     width: 600px;
-    margin: 0px auto;
+    margin: 70px auto 0;
 }
 main.creation h3 {
     font-size: 20px;

@@ -17,6 +17,7 @@ const userStorage = {
         key: (id) => {
             const ids = userStorage.get.ids()
             const idIndex = ids.indexOf(id)
+            console.log({ids})
             const quizKey = userStorage.get.keys()[idIndex]
 
             return quizKey
@@ -25,9 +26,9 @@ const userStorage = {
 
     save: (value, key) => {
         let userQuizzes = localStorage.getItem(key)
-        console.log(userQuizzes)
+        console.log({value, key})
 
-        if (userQuizzes == null) {
+        if (!userQuizzes) {
             localStorage.setItem(key, '[\"' + value +'\"]')
         
         } else {
@@ -50,21 +51,36 @@ const getQuizzes = async (quizId='') => {
 }
 
 
+const getUserQuizzes = async () => {
+    const userQuizzesIds = userStorage.get.ids() || []
+
+    if (userQuizzesIds.length > 0){  
+        let promises = []
+        userQuizzesIds.forEach((id) => {
+            promises.push(getQuizzes(id))
+        })
+
+        let res = await Promise.all(promises)
+        return res
+
+    } else return []
+}
+
+
 const editQuiz = async (e) => {
     const quizElement = e.target.parentElement.parentElement
-    const quizID = Number(quizElement.dataset.id)
+    const quizID = quizElement.dataset.id
     const quizKey = userStorage.get.key(quizID)
-    console.log(quizKey)
-
+    
     let quiz = await getQuizzes(quizID)
+    /* mandar o quiz para o processo de criação */
 
-    /* EDIÇÃO NA MÃO PARA TESTAR => O certo aqui é mandar o quiz para o processo de criação */
-    // title: Você é um fã da marvel? (O quiz mais facil de todos os tempos)
-    // quiz.title = 'Você é um fã da marvel? (O quiz mais difícil de todos os tempos)'
-
-    /* Descomentar abaixo depois que a parte de cima funcionar */
-    // delete quiz.id
-    // let response = await axios.put(`${apiURL}/${quizID}`, quiz, { headers: {'Secret-Key': quizKey} })
+    loadingScreen.show()
+    delete quiz.id
+    let response = await axios.put(`${apiURL}/${quizID}`, quiz, { headers: {'Secret-Key': quizKey} })
+    
+    setQuizzes()
+    loadingScreen.hide()
 
     console.log({quiz, quizElement, quizID, quizKey, response})
 }
@@ -82,65 +98,74 @@ const deleteQuiz = async (e) => {
 const setQuizzes = async () => {
     loadingScreen.show()
     renderQuizzes(await getQuizzes())
+    renderUserQuizzes(await getUserQuizzes())
     loadingScreen.hide()
 }
 
 
-const renderQuizzes = async (quizzes) => {
+const renderQuizzes = (quizzes) => {
     const allQuizzesContainer = document.querySelector('.home > .all-quizzes .quizzes-container')
-    const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
+    allQuizzesContainer.innerHTML = ''
     const userQuizzesIds = userStorage.get.ids() || []
 
     quizzes.forEach(quiz => {
         lista.push(quiz)
         const isFromUser = userQuizzesIds.some(id => id === quiz.id)        
-        if (!isFromUser) allQuizzesContainer.innerHTML += `<li data-id="${quiz.id}" style="background-image: url(${quiz.image})">${quiz.title}</li>`
+        if (!isFromUser) allQuizzesContainer.innerHTML += `<li data-id="${quiz.id}" style="background-image: url(${quiz.image})" onclick="openQuiz(this)">${quiz.title}</li>`
     });
+}
 
-    if (userQuizzesIds.length > 0){
+
+const renderUserQuizzes = (userQuizzes) => {
+    if (userQuizzes.length > 0) {
+        const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
+        userQuizzesContainer.innerHTML = ''
         document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
-        userQuizzesIds.forEach(id => {
-            getQuizzes(Number(id)).then(quiz => {
-                lista.push(quiz)
-                userQuizzesContainer.innerHTML += `
-                    <li data-id="${quiz.id}" style="background-image: url(${quiz.image})">
-                        <span>${quiz.title}</span>
-                        <div class="options">
-                            <button>
-                                <ion-icon name="create-outline"></ion-icon>
-                            </button>
-                            <button>
-                                <ion-icon name="trash-outline"></ion-icon>
-                            </button>
-                        </div>
-                    </li>`
-            })
-        })
-    
-    } else {
-        document.querySelector('.home .user-quizzes .empty').classList.remove('hidden')
-    }
-
-    // Define evento onclick de abrir, editar e deletar
-    const allQuizzes = document.querySelectorAll('.quizzes-container li')
-    allQuizzes.forEach(quiz => quiz.addEventListener('click', e => openQuiz(e.target)))
-
-    const userQuizzes = userQuizzesContainer.querySelectorAll('.options')
-    if (userQuizzes){
-        userQuizzes.forEach(options => {
-            const editBtn = options.querySelector('button:first-child')
-            const deleteBtn = options.querySelector('button:nth-child(2)')
+        
+        userQuizzes.forEach(quiz => {
+            lista.push(quiz)
             
-            editBtn.addEventListener('click', e => {
-                e.stopPropagation()
-                editQuiz(e)
+            userQuizzesContainer.innerHTML += `
+                <li data-id="${quiz.id}" style="background-image: url(${quiz.image})" onclick="openQuiz(this)">
+                    <span>${quiz.title}</span>
+                    <div class="options">
+                        <button>
+                            <ion-icon name="create-outline"></ion-icon>
+                        </button>
+                        <button>
+                            <ion-icon name="trash-outline"></ion-icon>
+                        </button>
+                    </div>
+                </li>`
+        })
+        
+        const options = userQuizzesContainer.querySelectorAll('.options')
+        console.log(options)
+        
+        options.forEach(option => {
+            console.log({
+                option, 
+                edit: option.querySelector('button:first-child'), 
+                delete: option.querySelector('button:nth-child(2)')})
+            
+            // editBtn
+            option.querySelector('button:first-child')
+                .addEventListener('click', e => {
+                    e.stopPropagation()
+                    editQuiz(e)
             })
-            deleteBtn.addEventListener('click', e => {
-                e.stopPropagation()
-                deleteQuiz(e)
+
+            // deleteBtn
+            option.querySelector('button:nth-child(2)')
+                .addEventListener('click', e => {
+                    e.stopPropagation()
+                    deleteQuiz(e)
             })
         })
-    }
+
+    } else{
+        document.querySelector('main.home .user-quizzes .empty').classList.remove('hidden')
+    } 
 }
 
 

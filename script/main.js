@@ -36,6 +36,18 @@ const userStorage = {
             novoArray.push(`${value}`)
             localStorage.setItem(key, JSON.stringify(novoArray))
         }
+    },
+
+    update: (id) => {
+        let ids = userStorage.get.ids()
+        let keys = userStorage.get.keys()
+        let index = ids.indexOf(id)
+
+        ids.splice(index, 1)
+        keys.splice(index, 1)
+
+        localStorage.setItem('userIDs', JSON.stringify(ids))
+        localStorage.setItem('userKeys', JSON.stringify(keys))
     }
 }
 let lista = [] // lista com todos os quiz's
@@ -88,10 +100,20 @@ const editQuiz = async (e) => {
 
 const deleteQuiz = async (e) => {
     const quizElement = e.target.parentElement.parentElement
-    const quizID = Number(quizElement.dataset.id)
+    const quizID = quizElement.dataset.id
     const quizKey = userStorage.get.key(quizID)
+    console.log(quizKey)
+    
+    let quiz = await getQuizzes(quizID)
 
-    console.log({quizElement, quizID, quizKey})
+    loadingScreen.show()
+    delete quiz.id
+    let response = await axios.delete(`${apiURL}/${quizID}`, { headers: {'Secret-Key': quizKey} })
+    userStorage.update(quizID)
+    setQuizzes()
+    loadingScreen.hide()
+
+    console.log({quizElement, quizID, quizKey, response})
 }
 
 
@@ -139,15 +161,8 @@ const renderUserQuizzes = (userQuizzes) => {
                 </li>`
         })
         
-        const options = userQuizzesContainer.querySelectorAll('.options')
-        console.log(options)
-        
+        const options = userQuizzesContainer.querySelectorAll('.options')        
         options.forEach(option => {
-            console.log({
-                option, 
-                edit: option.querySelector('button:first-child'), 
-                delete: option.querySelector('button:nth-child(2)')})
-            
             // editBtn
             option.querySelector('button:first-child')
                 .addEventListener('click', e => {

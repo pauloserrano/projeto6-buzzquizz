@@ -13,7 +13,7 @@ const userStorage = {
 
     get: {
         ids: () => JSON.parse(localStorage.getItem('userIDs')),
-        keys: () => JSON.parse(localStorage.getItem('userKeys').replace('[', '["').replace(']', '"]')),
+        keys: () => JSON.parse(localStorage.getItem('userKeys')),
         key: (id) => {
             const ids = userStorage.get.ids()
             const idIndex = ids.indexOf(id)
@@ -24,10 +24,11 @@ const userStorage = {
     },
 
     save: (value, key) => {
-        const userQuizzes = localStorage.getItem(key).replace('[', '["').replace(']', '"]')
+        let userQuizzes = localStorage.getItem(key)
+        console.log(userQuizzes)
 
-        if (!userQuizzes) {
-            localStorage.setItem(key, `[${value}]`)
+        if (userQuizzes == null) {
+            localStorage.setItem(key, '[\"' + value +'\"]')
         
         } else {
             const novoArray = JSON.parse(userQuizzes)

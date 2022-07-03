@@ -34,6 +34,7 @@ header h1{
 main.home{
     max-width: 1050px;
     margin: 70px auto 0;
+    padding: 0 16px;
 }
 
 main.home > *, .empty{
@@ -373,11 +374,10 @@ main.home .user-quizzes .quizzes-container li div.options button ion-icon{
 
 main.creation {
     background-color: #FAFAFA;
-    min-width: 100%;
-    min-height: 100%;
+    width: 600px;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    width: 600px;
     margin: 70px auto 0;
 }
 main.creation h3 {
@@ -388,7 +388,7 @@ main.creation h3 {
 main.creation > div {
     background-color: #ffffff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.30);
-    padding: 20px 0px 10px 17px;
+    padding: 20px 17px 10px;
     display: flex;
     flex-direction: column;
     width: 600px;
@@ -406,7 +406,7 @@ main.creation div input {
     border-radius: 5px;
     border: solid 1px #d1d1d1;
     margin-bottom: 10px;
-    padding-left: 15px;
+    padding: 0 15px;
     font-size: 19px;
 }
 main.creation button {
@@ -470,34 +470,26 @@ div.create.success p {
 
 
 @media (max-width: 1100px){
-    main.home{
-        padding: 0 16px;
-    }
-
     main.home .quizzes-container{
         grid-template-columns: 1fr;
     }
 
     main.home .user-quizzes .all-quizzes h2{
-        justify-content: space-between  ;
+        justify-content: space-between;
     }
 
-    .main-containner-quiz, .containner-quiz{
+    .main-containner-quiz, .containner-quiz, .banner-quiz div, .containner-quiz, .containner-result-quiz,
+    main.creation{
         width: 100%;
     }
 
     .containner-quiz, .containner-result-quiz{
-        width: 100%;
         padding: 16px;
     }
 
     .banner-quiz h2 {
         font-size: 20px;
         max-width: 100%;
-    }
-
-    .banner-quiz div {
-        width: 100%;
     }
 
     .question-options{
@@ -522,10 +514,16 @@ div.create.success p {
     .info-quiz{
         font-size: 20px;
     }
+
     .result-quiz{
         grid-template-columns: 1fr;
     }
+
     .result-quiz span{
         font-size: 18px;
+    }
+
+    main.creation > div, main.creation > div input{
+        width: 100%;
     }
 }

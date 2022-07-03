@@ -32,7 +32,7 @@ const userStorage = {
         
         } else {
             const novoArray = JSON.parse(userQuizzes)
-            novoArray.push(value)
+            novoArray.push(`${value}`)
             localStorage.setItem(key, JSON.stringify(novoArray))
         }
     }
@@ -93,26 +93,33 @@ const renderQuizzes = async (quizzes) => {
 
     quizzes.forEach(quiz => {
         lista.push(quiz)
-        const isFromUser = userQuizzesIds.some(id => id === quiz.id)
-        const templates = {
-            default: `<li data-id="${quiz.id}" style="background-image: url(${quiz.image})">${quiz.title}</li>`, 
-            user: `
-                <li data-id="${quiz.id}" style="background-image: url(${quiz.image})">
-                    <span>${quiz.title}</span>
-                    <div class="options">
-                        <button>
-                            <ion-icon name="create-outline"></ion-icon>
-                        </button>
-                        <button>
-                            <ion-icon name="trash-outline"></ion-icon>
-                        </button>
-                    </div>
-                </li>`,
-        }
-        
-        if (isFromUser) userQuizzesContainer.innerHTML += templates.user
-        else allQuizzesContainer.innerHTML += templates.default
+        const isFromUser = userQuizzesIds.some(id => id === quiz.id)        
+        if (!isFromUser) allQuizzesContainer.innerHTML += `<li data-id="${quiz.id}" style="background-image: url(${quiz.image})">${quiz.title}</li>`
     });
+
+    if (userQuizzesIds.length > 0){
+        document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
+        userQuizzesIds.forEach(id => {
+            getQuizzes(Number(id)).then(quiz => {
+                lista.push(quiz)
+                userQuizzesContainer.innerHTML += `
+                    <li data-id="${quiz.id}" style="background-image: url(${quiz.image})">
+                        <span>${quiz.title}</span>
+                        <div class="options">
+                            <button>
+                                <ion-icon name="create-outline"></ion-icon>
+                            </button>
+                            <button>
+                                <ion-icon name="trash-outline"></ion-icon>
+                            </button>
+                        </div>
+                    </li>`
+            })
+        })
+    
+    } else {
+        document.querySelector('.home .user-quizzes .empty').classList.remove('hidden')
+    }
 
     // Define evento onclick de abrir, editar e deletar
     const allQuizzes = document.querySelectorAll('.quizzes-container li')
@@ -133,15 +140,6 @@ const renderQuizzes = async (quizzes) => {
                 deleteQuiz(e)
             })
         })
-    }
-
-    
-    // Mostrar container certo dependendo se o usuario criou quizzes ou não
-    if (userQuizzesContainer.querySelector('li') !== null){
-        document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
-    
-    } else {
-        document.querySelector('.home .user-quizzes .empty').classList.remove('hidden')
     }
 }
 

@@ -171,13 +171,10 @@ function exibirQuiz (quizId, quizObj){
     document.querySelector(".page02").innerHTML = 
             `
             <div class="banner-quiz">
-            <img src="${quizObj.image}" alt="">
-            <span>${quizObj.title}</span>
-            <div></div>
+                <img src="${quizObj.image}">
+                <h2>${quizObj.title}</h2>
             </div>
-
-            <div class="main-containner-quiz">
-            </div>
+            <div class="main-containner-quiz"></div>
             `
     for ( let i = 0; i < quizObj.questions.length; i++){
             
@@ -269,11 +266,9 @@ function restartVar () {
 }
 
 function verifyResult(){
-
     total = Math.round((result/quizObject.questions.length) * 100)
 
     if (clicks === quizObject.questions.length){
-
         quizObject.levels.sort(ordemCrescente)
         console.log (quizObject)
         

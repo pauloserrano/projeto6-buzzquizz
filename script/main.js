@@ -17,7 +17,6 @@ const userStorage = {
         key: (id) => {
             const ids = userStorage.get.ids()
             const idIndex = ids.indexOf(id)
-            console.log({ids})
             const quizKey = userStorage.get.keys()[idIndex]
 
             return quizKey
@@ -85,16 +84,7 @@ const editQuiz = async (e) => {
     const quizKey = userStorage.get.key(quizID)
     
     let quiz = await getQuizzes(quizID)
-    /* mandar o quiz para o processo de criação */
-
-    loadingScreen.show()
-    delete quiz.id
-    let response = await axios.put(`${apiURL}/${quizID}`, quiz, { headers: {'Secret-Key': quizKey} })
-    
-    setQuizzes()
-    loadingScreen.hide()
-
-    console.log({quiz, quizElement, quizID, quizKey, response})
+    startQuizCreation(quiz)
 }
 
 
@@ -104,10 +94,7 @@ const deleteQuiz = async (e) => {
     const quizKey = userStorage.get.key(quizID)
     console.log(quizKey)
     
-    let quiz = await getQuizzes(quizID)
-
     loadingScreen.show()
-    delete quiz.id
     let response = await axios.delete(`${apiURL}/${quizID}`, { headers: {'Secret-Key': quizKey} })
     userStorage.update(quizID)
     setQuizzes()
@@ -197,7 +184,6 @@ const openQuiz = async (e) => {
 }
 
 function exibirQuiz (quizId, quizObj){
-
     quizObject = quizObj
     console.log(quizObj)
     document.body.scrollIntoView()

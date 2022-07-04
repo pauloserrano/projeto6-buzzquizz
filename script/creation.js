@@ -1,37 +1,45 @@
-function collapseDiv(element) {
-    element.parentNode.classList.toggle("collapsed");
-}
-
+let lastPostedQuiz = {};
 let quiz = {
     title: "",
     image: "",
     questions: [],
     levels: []
 };
-let lastPostedQuiz = {};
+let isEdit = false
 
-function startQuizCreation() {
+function startQuizCreation(previousQuiz) {
+    console.log(quiz.questions.length > 0)
+    if (previousQuiz !== undefined) {
+        quiz = previousQuiz
+        isEdit = true
+    }
+
     document.querySelector("main.home").classList.add("hidden");
-
-    document.querySelector("main.creation").innerHTML = `
+    
+    const mainCreation = document.querySelector("main.creation")
+    mainCreation.classList.remove("hidden");
+    mainCreation.innerHTML = `
         <h3>Comece pelo começo</h3>
         <div>
-            <input placeholder="Título do seu quizz" type="text">
-            <input placeholder="URL da imagem do seu quizz" type="text">
-            <input placeholder="Quantidade de perguntas do quizz" type="text">
-            <input placeholder="Quantidade de níveis do quizz" type="text">
+            <input placeholder="Título do seu quizz" type="text" 
+            value="${quiz.title}">
+            <input placeholder="URL da imagem do seu quizz" type="text" 
+            value="${quiz.image}">
+            <input placeholder="Quantidade de perguntas do quizz" type="text" 
+            value="${(quiz.questions.length > 0) ? quiz.questions.length : ''}">
+            <input placeholder="Quantidade de níveis do quizz" type="text" 
+            value="${(quiz.levels.length > 0) ? quiz.levels.length : ''}">
         </div>
         <button onclick="createBasicInfo(this)">Prosseguir para criar perguntas</button>
     `;
-    //colocar um função aqui para inserir os values nos inputs para editar
-    document.querySelector("main.creation").classList.remove("hidden");
 }
-function createBasicInfo(element) {
+
+function createBasicInfo(e) {
     const basicInfo = {
-        title: `${element.parentNode.querySelector("input:nth-of-type(1)").value}`,
-        image: `${element.parentNode.querySelector("input:nth-of-type(2)").value}`,
-        nquestions: `${element.parentNode.querySelector("input:nth-of-type(3)").value}`,
-        nlevels: `${element.parentNode.querySelector("input:nth-of-type(4)").value}`,
+        title: `${e.parentNode.querySelector("input:nth-of-type(1)").value}`,
+        image: `${e.parentNode.querySelector("input:nth-of-type(2)").value}`,
+        nquestions: `${e.parentNode.querySelector("input:nth-of-type(3)").value}`,
+        nlevels: `${e.parentNode.querySelector("input:nth-of-type(4)").value}`,
     };
 
     if (checkBasicInfo(basicInfo)) {
@@ -42,8 +50,9 @@ function createBasicInfo(element) {
         quiz.levels.length = basicInfo.nlevels;
         quiz.levels = quiz.levels.slice(0,basicInfo.nlevels);
 
-        console.log(quiz);        
+        console.log(quiz);
         startQuestionsCreation();
+    
     } else
         alert("Dados incorretos!");
 }
@@ -64,52 +73,88 @@ function checkBasicInfo(basicInfo) {
 
 function startQuestionsCreation() {
     document.querySelector("main.creation").innerHTML = '<h3>Crie suas perguntas</h3>';
+    console.log(quiz.questions[0])
     
-    for (let i=0 ; i<quiz.questions.length ; i++)
+    for (let i = 0; i < quiz.questions.length; i++)
         document.querySelector("main.creation").innerHTML += `
             <div class="create questions collapsed">
                 <div onclick="collapseDiv(this)">
-                    <h2>Pergunta ${i+1}</h2>
+                    <h2>Pergunta${i + 1}</h2>
                 </div>
-                <ion-icon onclick="collapseDiv(this)" name="create-outline"></ion-icon>
+                    <ion-icon onclick="collapseDiv(this)" name="create-outline"></ion-icon>
                 <div>
-                    <input placeholder="Texto da pergunta" type="text">
-                    <input placeholder="Cor de fundo da pergunta" type="text">
+                    <input placeholder="Texto da pergunta" type="text" 
+                    value="${(quiz.questions[i])
+                        ? quiz.questions[i].title
+                        : ''}">
+                    <input placeholder="Cor de fundo da pergunta" type="text"
+                    value="${(quiz.questions[i])
+                        ? quiz.questions[i].color
+                        : ''}">
                     
                     <h2>Resposta correta</h2>
-                    <input placeholder="Resposta correta" type="text">
-                    <input placeholder="URL da imagem" type="text">
+                    <input placeholder="Resposta correta" type="text"
+                    value="${(quiz.questions[i] && quiz.questions[i].answers[0])
+                        ? quiz.questions[i].answers[0].text
+                        : ''}">
+                    <input placeholder="URL da imagem" type="text"
+                    value="${(quiz.questions[i] && quiz.questions[i].answers[0]) 
+                        ? quiz.questions[i].answers[0].image
+                        : ''}">
 
                     <h2>Respostas incorretas</h2>
-                    <input placeholder="Resposta incorreta 1" type="text">
-                    <input placeholder="URL da imagem 1" type="text">
-                    <input placeholder="Resposta incorreta 2" type="text">
-                    <input placeholder="URL da imagem 2" type="text">
-                    <input placeholder="Resposta incorreta 3" type="text">
-                    <input placeholder="URL da imagem 3" type="text">
+                    <input placeholder="Resposta incorreta 1" type="text"
+                    value="${(quiz.questions[i] && quiz.questions[i].answers[1]) 
+                        ? quiz.questions[i].answers[1].text
+                        : ''}">
+
+                    <input placeholder="URL da imagem 1" type="text"
+                    value="${(quiz.questions[i] && quiz.questions[i].answers[1]) 
+                        ? quiz.questions[i].answers[1].image
+                        : ''}">
+
+                    <input placeholder="Resposta incorreta 2" type="text"
+                    value="${(quiz.questions[i] && quiz.questions[i].answers[2]) 
+                        ? quiz.questions[i].answers[2].text
+                        : ''}">
+
+                    <input placeholder="URL da imagem 2" type="text"
+                    value="${(quiz.questions[i] && quiz.questions[i].answers[2]) 
+                        ? quiz.questions[i].answers[2].image
+                        : ''}">
+
+                    <input placeholder="Resposta incorreta 3" type="text"
+                    value="${(quiz.questions[i] && quiz.questions[i].answers[3]) 
+                        ? quiz.questions[i].answers[3].image
+                        : ''}">
+
+                    <input placeholder="URL da imagem 3" type="text"
+                    value="${(quiz.questions[i] && quiz.questions[i].answers[3]) 
+                        ? quiz.questions[i].answers[3].image
+                        : ''}">
                 </div>                
             </div>
         `;
         document.querySelector("main.creation div:first-of-type").classList.remove("collapsed");
         document.querySelector("main.creation").innerHTML += `
             <button onclick="createQuestions(this)">Prosseguir para criar níveis</button>
-       `;
-
-    //colocar um função aqui para inserir os values nos inputs para editar    
+       `; 
 }
-function createQuestions(element) {
+
+function createQuestions(e) {
     let createdQuestions = [];
     let createdAnswers = [];
     let questionElm;
 
-    for (let i=0 ; i<quiz.questions.length ; i++) {
-        questionElm = element.parentNode.querySelector(`div.create.questions:nth-of-type(${i+1})`);
+    for (let i = 0; i < quiz.questions.length; i++) {
+        questionElm = e.parentNode.querySelector(`div.create.questions:nth-of-type(${i + 1})`);
 
         createdAnswers = [];
-        for (j=0 ; j<4 ; j++) {
-            if(questionElm.querySelector(`input:nth-of-type(${3+j*2})`).value.length > 0 && questionElm.querySelector(`input:nth-of-type(${4+j*2})`).value.length > 0) {
-                let jtext = questionElm.querySelector(`input:nth-of-type(${3+j*2})`).value;
-                let jimage = questionElm.querySelector(`input:nth-of-type(${4+j*2})`).value;
+        for (j = 0; j < 4; j++) {
+            if (questionElm.querySelector(`input:nth-of-type(${3 + (j * 2)})`).value.length > 0 && questionElm.querySelector(`input:nth-of-type(${4 + (j * 2)})`).value.length > 0) {
+                let jtext = questionElm.querySelector(`input:nth-of-type(${3 + (j * 2)})`).value;
+                let jimage = questionElm.querySelector(`input:nth-of-type(${4 + (j * 2)})`).value;
+                
                 createdAnswers.push({
                     text: jtext,
                     image: jimage,
@@ -132,41 +177,57 @@ function createQuestions(element) {
     } else
         alert("Dados incorretos!");
 }
+
 function checkQuestions(createdQuestions) {
-
-    for (let i=0 ; i<createdQuestions.length ; i++) {
+    for (let i = 0; i < createdQuestions.length; i++) {
         
-        if (createdQuestions[i].title.length < 20)
-            return false;
-        if (!checkColor(createdQuestions[i].color))
-            return false;
-        if (createdQuestions[i].answers.length < 2)
-            return false;
-        if(createdQuestions[i].answers[0].isCorrectAnswer === false)
-            return false;
+        const isTitleShort = createdQuestions[i].title.length < 20
+        if (isTitleShort) return false;
+        
+        const isColorValid = !checkColor(createdQuestions[i].color)
+        if (isColorValid) return false;
 
-        for (let j=0 ; j<createdQuestions[i].answers.length ; j++)
-                    if(!checkURL(createdQuestions[i].answers[j].image))
-                        return false;
+        const isAnswersValid = createdQuestions[i].answers.length < 2
+        if (isAnswersValid) return false;
+
+        const hasCorrectAnswer = createdQuestions[i].answers[0].hasCorrectAnswer === false
+        if(hasCorrectAnswer) return false;
+
+        for (let j = 0; j < createdQuestions[i].answers.length; j++)
+            if(!checkURL(createdQuestions[i].answers[j].image)) return false;
     }
     return true;
 }
 
 function startLevelsCreation() {
-    
     document.querySelector("main.creation").innerHTML = '<h3>Agora, decida os níveis</h3>';
-    for (let i=0 ; i<quiz.levels.length ; i++)
+    for (let i = 0; i < quiz.levels.length; i++)
         document.querySelector("main.creation").innerHTML += `
             <div class="create collapsed">
                 <div onclick="collapseDiv(this)">
-                    <h2>Nível ${i+1}</h2>
+                    <h2>Nível ${i + 1}</h2>
                 </div>
                 <ion-icon onclick="collapseDiv(this)" name="create-outline"></ion-icon>
                 <div>
-                    <input placeholder="Título do nível" type="text">
-                    <input placeholder="% de acerto mínima" type="text">
-                    <input placeholder="URL da imagem do nível" type="text">
-                    <input placeholder="Descrição do nível" type="text">
+                    <input placeholder="Título do nível" type="text"
+                    value="${(quiz.levels[i] && quiz.levels[i].title) 
+                        ? quiz.levels[i].title
+                        : ''}">
+
+                    <input placeholder="% de acerto mínima" type="text"
+                    value="${(quiz.levels[i] && quiz.levels[i].minValue) 
+                        ? quiz.levels[i].minValue
+                        : ''}">
+
+                    <input placeholder="URL da imagem do nível" type="text"
+                    value="${(quiz.levels[i] && quiz.levels[i].image) 
+                        ? quiz.levels[i].image
+                        : ''}">
+
+                    <input placeholder="Descrição do nível" type="text"
+                    value="${(quiz.levels[i] && quiz.levels[i].text) 
+                        ? quiz.levels[i].text
+                        : ''}">
                 </div>                
             </div>
         `;
@@ -174,13 +235,13 @@ function startLevelsCreation() {
         document.querySelector("main.creation").innerHTML += `
             <button onclick="createLevels(this)">Finalizar Quiz</button>
        `;
-    //Criar função aqui para preencher os dados em caso de edição
 }
+
 function createLevels(element) {
     let createdLevels = [];
-    
     let levelElm;
-    for (let i=0 ; i<quiz.levels.length ; i++) {
+
+    for (let i = 0; i < quiz.levels.length; i++) {
         levelElm = element.parentNode.querySelector(`div.create:nth-of-type(${i+1})`);
 
         createdLevels[i] = {
@@ -191,18 +252,18 @@ function createLevels(element) {
         };
     }
 
-    console.log(createdLevels);
+    // console.log(createdLevels);
     if(checkLevels(createdLevels)) {
         quiz.levels = createdLevels;
-        console.log(quiz);
+        // console.log(quiz);
         postCreatedQuiz();
     } else
         alert("Dados incorretos!");
 }
-function checkLevels(createdLevels) {
 
+function checkLevels(createdLevels) {
     let lvlzero = false;
-    for (let i=0 ; i<createdLevels.length ; i++) {
+    for (let i = 0; i < createdLevels.length; i++) {
         
         if(createdLevels[i].title.length < 10)
             return false;
@@ -224,25 +285,37 @@ function checkLevels(createdLevels) {
 }
 
 function postCreatedQuiz() {
-    const promise = axios.post("https://mock-api.driven.com.br/api/v7/buzzquizz/quizzes",quiz);
-    loadingScreen.show()
-    promise.then(createQuizSuccess);
-    loadingScreen.hide()
-    //chamar tela de loading
-    // Opá, aqui é o Paulo, fiz pra ti essa parte já =)
-}
-function createQuizSuccess(postedQuiz) {
+    if (isEdit){
+        const quizKey = userStorage.get.key(`${quiz.id}`)
+        const quizID = quiz.id
+        console.log(quizKey)
+        
+        loadingScreen.show()
+        delete quiz.id
+        axios.put(`${apiURL}/${quizID}`, quiz, { headers: {'Secret-Key': quizKey} }).then(createQuizSuccess)
+        loadingScreen.hide()
     
+    } else {
+        const promise = axios.post(apiURL, quiz);
+        loadingScreen.show()
+        promise.then(createQuizSuccess);
+        loadingScreen.hide()
+    }
+}
+
+function createQuizSuccess(postedQuiz) {
     lastPostedQuiz = postedQuiz;
     console.log(lastPostedQuiz.data);
     console.log(lastPostedQuiz.data.id);
 
-    // Paulo: Armazenamento do id e key (não foi testado ainda mas deve funcionar)
-    userStorage.set.id(lastPostedQuiz.data.id);
-    userStorage.set.key(lastPostedQuiz.data.key);
+    // Armazenamento
+    if (!isEdit){
+        userStorage.set.id(lastPostedQuiz.data.id);
+        userStorage.set.key(lastPostedQuiz.data.key);
+    }
 
-    // Paulo: Renderização do novo quiz na home
-    renderQuizzes(lastPostedQuiz.data);
+    // Renderização
+    setQuizzes()
 
     document.querySelector("main.creation").innerHTML = `
         <h3>Seu Quizz está pronto!</h3>
@@ -261,4 +334,9 @@ function createQuizSuccess(postedQuiz) {
         questions: [],
         levels: []
     };
+}
+
+
+function collapseDiv(element) {
+    element.parentNode.classList.toggle("collapsed");
 }

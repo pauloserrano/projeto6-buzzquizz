@@ -97,7 +97,7 @@ const deleteQuiz = async (e) => {
     loadingScreen.show()
     let response = await axios.delete(`${apiURL}/${quizID}`, { headers: {'Secret-Key': quizKey} })
     userStorage.update(quizID)
-    setQuizzes()
+    await setQuizzes()
     loadingScreen.hide()
     console.log({quizElement, quizID, quizKey, response})
 }
@@ -105,8 +105,8 @@ const deleteQuiz = async (e) => {
 
 const setQuizzes = async () => {
     loadingScreen.show()
-    renderQuizzes(await getQuizzes())
-    renderUserQuizzes(await getUserQuizzes())
+    await renderQuizzes(await getQuizzes())
+    await renderUserQuizzes(await getUserQuizzes())
     loadingScreen.hide()
 }
 

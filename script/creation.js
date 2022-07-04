@@ -7,6 +7,8 @@ let quiz = {
 };
 let isEdit = false
 
+
+
 function startQuizCreation(previousQuiz) {
     console.log(quiz.questions.length > 0)
     if (previousQuiz !== undefined) {
@@ -324,16 +326,23 @@ function createQuizSuccess(postedQuiz) {
             <p>${lastPostedQuiz.data.title}</p>
         </div>
         <button class="open-created-quiz">Acessar Quizz</button>
-        <button class="button-home-quiz" onclick="backHome()">Voltar pra home</button>
+        <button class="button-home-quiz" onclick="document.location.reload()">Voltar pra home</button>
     `;
     document.querySelector("button.open-created-quiz").setAttribute("onclick",`exibirQuiz(lastPostedQuiz.data.id,lastPostedQuiz.data)`);
 
+    resetCreation()
+}
+
+
+const resetCreation = () => {
     quiz = {
         title: "",
         image: "",
         questions: [],
         levels: []
     };
+
+    isEdit = false
 }
 
 

@@ -129,6 +129,7 @@ const renderUserQuizzes = (userQuizzes) => {
         const userQuizzesContainer = document.querySelector('.home .user-quizzes .quizzes-container')
         userQuizzesContainer.innerHTML = ''
         document.querySelector('.home .user-quizzes .all-quizzes').classList.remove('hidden')
+        document.querySelector('main.home .user-quizzes .empty').classList.add('hidden')
         
         userQuizzes.forEach(quiz => {
             lista.push(quiz)
@@ -165,6 +166,7 @@ const renderUserQuizzes = (userQuizzes) => {
         })
 
     } else{
+        document.querySelector('.home .user-quizzes .all-quizzes').classList.add('hidden')
         document.querySelector('main.home .user-quizzes .empty').classList.remove('hidden')
     } 
 }
@@ -274,6 +276,7 @@ const backHome = () => {
     document.querySelector(".page02").classList.add("hidden")
     document.querySelector(".creation").classList.add("hidden")
     restartVar()
+    resetCreation()
 }
 
 const restartButton = () => {
@@ -281,7 +284,6 @@ const restartButton = () => {
     restartVar()
     backHome()
     exibirQuiz(quizObject.id, quizObject)
-    
 }
 
 function restartVar () {
